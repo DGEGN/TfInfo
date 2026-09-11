@@ -25,403 +25,114 @@
   }
   *{box-sizing:border-box;}
   html,body{height:100%;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--text);
-    font-family:var(--sans);
-    -webkit-font-smoothing:antialiased;
-  }
-  button, input, select{ font-family:inherit; }
+  body{ margin:0; background:var(--bg); color:var(--text); font-family:var(--sans); -webkit-font-smoothing:antialiased; }
+  button, input, select, textarea{ font-family:inherit; }
   .hidden{ display:none !important; }
 
   /* ---------- Login ---------- */
-  #login-screen{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-  }
-  .brand{
-    display:flex;
-    align-items:baseline;
-    gap:10px;
-    margin-bottom:28px;
-  }
-  .brand-mark{
-    font-family:var(--mono);
-    font-weight:600;
-    font-size:14px;
-    color:var(--bg);
-    background:var(--accent);
-    padding:3px 7px;
-    border-radius:5px;
-    letter-spacing:0.04em;
-  }
-  .brand-name{
-    font-size:22px;
-    font-weight:600;
-    letter-spacing:-0.01em;
-  }
-  .login-card{
-    width:100%;
-    max-width:340px;
-    background:var(--bg-elev);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:22px;
-  }
+  #login-screen{ min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; }
+  .brand{ display:flex; align-items:baseline; gap:10px; margin-bottom:28px; }
+  .brand-mark{ font-family:var(--mono); font-weight:600; font-size:14px; color:var(--bg); background:var(--accent); padding:3px 7px; border-radius:5px; letter-spacing:0.04em; }
+  .brand-name{ font-size:22px; font-weight:600; letter-spacing:-0.01em; }
+  .login-card{ width:100%; max-width:340px; background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:22px; }
   .field{ margin-bottom:14px; }
-  .field label{
-    display:block;
-    font-size:12px;
-    color:var(--text-muted);
-    margin-bottom:6px;
-  }
-  .field input{
-    width:100%;
-    padding:11px 12px;
-    background:var(--bg-elev-2);
-    border:1px solid var(--border);
-    border-radius:8px;
-    color:var(--text);
-    font-size:15px;
-  }
-  .field input:focus{
-    outline:none;
-    border-color:var(--accent);
-  }
-  .btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:8px;
-    border:none;
-    border-radius:8px;
-    padding:12px 16px;
-    font-size:15px;
-    font-weight:600;
-    cursor:pointer;
-    width:100%;
-  }
+  .field label{ display:block; font-size:12px; color:var(--text-muted); margin-bottom:6px; }
+  .field input, .field select{ width:100%; padding:11px 12px; background:var(--bg-elev-2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:15px; }
+  .field input:focus, .field select:focus{ outline:none; border-color:var(--accent); }
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; border:none; border-radius:8px; padding:12px 16px; font-size:15px; font-weight:600; cursor:pointer; width:100%; }
   .btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
   .btn-primary{ background:var(--accent); color:var(--accent-contrast); }
   .btn-primary:active{ opacity:0.85; }
   .btn-ghost{ background:transparent; color:var(--text-muted); border:1px solid var(--border); }
-  .login-error{
-    color:var(--danger);
-    font-size:13px;
-    margin-top:10px;
-    min-height:16px;
-  }
-  .login-hint{
-    color:var(--text-muted);
-    font-size:12px;
-    margin-top:18px;
-    max-width:340px;
-    text-align:center;
-    line-height:1.5;
-  }
+  .login-error{ color:var(--danger); font-size:13px; margin-top:10px; min-height:16px; }
+  .login-hint{ color:var(--text-muted); font-size:12px; margin-top:18px; max-width:340px; text-align:center; line-height:1.5; }
 
   /* ---------- App shell ---------- */
-  #app{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-  }
-  header.topbar{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:14px 18px;
-    border-bottom:1px solid var(--border);
-    background:var(--bg-elev);
-  }
-  header.topbar .brand-name{ font-size:17px; }
-  .user-chip{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:13px;
-    color:var(--text-muted);
-  }
-  .user-chip button{
-    background:none;
-    border:none;
-    color:var(--text-muted);
-    text-decoration:underline;
-    font-size:13px;
-    cursor:pointer;
-    padding:0;
-  }
-  main{
-    flex:1;
-    width:100%;
-    max-width:640px;
-    margin:0 auto;
-    padding:18px 16px 90px;
-  }
-  .view{ display:none; }
-  .view.active{ display:block; }
+  #app{ min-height:100vh; display:flex; flex-direction:column; }
+  header.topbar{ display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid var(--border); background:var(--bg-elev); position:sticky; top:0; z-index:10; }
+  .topbar-back{ background:none; border:none; color:var(--text); display:flex; align-items:center; justify-content:center; padding:2px; cursor:pointer; }
+  .topbar-back svg{ width:22px; height:22px; }
+  .topbar-title{ font-size:17px; font-weight:600; flex:1; }
+  .user-chip{ display:flex; align-items:center; gap:10px; font-size:12.5px; color:var(--text-muted); }
+  .user-chip button{ background:none; border:none; color:var(--text-muted); text-decoration:underline; font-size:12.5px; cursor:pointer; padding:0; }
 
-  h2.view-title{
-    font-size:19px;
-    font-weight:600;
-    margin:2px 0 16px;
-  }
+  main{ flex:1; width:100%; max-width:640px; margin:0 auto; padding:18px 16px 40px; }
+  .screen{ display:none; }
+  .screen.active{ display:block; }
+
+  h2.view-title{ font-size:19px; font-weight:600; margin:2px 0 16px; }
   .subtle{ color:var(--text-muted); font-size:13px; }
 
-  nav.tabbar{
-    position:fixed;
-    bottom:0; left:0; right:0;
-    display:flex;
-    background:var(--bg-elev);
-    border-top:1px solid var(--border);
-    padding:6px 6px calc(6px + env(safe-area-inset-bottom));
-  }
-  nav.tabbar button{
-    flex:1;
-    background:none;
-    border:none;
-    color:var(--text-muted);
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:3px;
-    padding:8px 4px;
-    font-size:11px;
-    border-radius:8px;
-    cursor:pointer;
-  }
-  nav.tabbar button svg{ width:20px; height:20px; }
-  nav.tabbar button.active{ color:var(--accent); }
+  /* ---------- Startmenü-Kacheln ---------- */
+  .tile-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .tile{ background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:22px 10px; text-align:center; color:var(--text); font-size:14.5px; font-weight:600; cursor:pointer; min-height:74px; display:flex; align-items:center; justify-content:center; }
+  .tile:active{ background:var(--bg-elev-2); }
+  .tile.tile-accent{ border-color:var(--accent); }
+
+  /* ---------- Untermenü-Zeilen (Bf/Strecke) ---------- */
+  .menu-list{ display:flex; flex-direction:column; gap:8px; }
+  .menu-row{ display:flex; align-items:center; justify-content:space-between; background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:15px 16px; font-size:15px; font-weight:500; cursor:pointer; }
+  .menu-row:active{ background:var(--bg-elev-2); }
+  .menu-row svg{ width:17px; height:17px; color:var(--text-muted); flex-shrink:0; }
 
   /* ---------- Suche ---------- */
-  .search{
-    width:100%;
-    padding:11px 12px;
-    background:var(--bg-elev);
-    border:1px solid var(--border);
-    border-radius:8px;
-    color:var(--text);
-    font-size:15px;
-    margin-bottom:14px;
-  }
+  .search{ width:100%; padding:11px 12px; background:var(--bg-elev); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:15px; margin-bottom:10px; }
   .search:focus{ outline:none; border-color:var(--accent); }
+  .checkbox-row{ display:flex; align-items:center; gap:8px; margin-bottom:16px; font-size:13.5px; color:var(--text-muted); }
+  .checkbox-row input{ width:16px; height:16px; }
 
-  /* ---------- Kontaktliste ---------- */
-  .kategorie-label{
-    font-family:var(--mono);
-    font-size:11px;
-    letter-spacing:0.03em;
-    color:var(--text-muted);
-    margin:18px 0 8px;
-  }
-  .kategorie-label:first-child{ margin-top:0; }
-  .kontakt-card, .info-card{
-    display:flex;
-    align-items:center;
-    gap:12px;
-    background:var(--bg-elev);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:13px 14px;
-    margin-bottom:8px;
-  }
+  /* ---------- Telefonbuch Kategorien ---------- */
+  .kat-grid{ display:flex; flex-direction:column; gap:10px; margin-bottom:18px; }
+  .kat-btn{ background:var(--bg-elev-2); border:1px solid var(--border); border-radius:var(--radius); padding:16px; text-align:center; font-size:16px; font-weight:500; color:var(--text); cursor:pointer; }
+  .kat-btn.active{ border-color:var(--accent); color:var(--accent); }
+  .kat-hint{ text-align:center; color:var(--text-muted); font-size:13px; padding:10px 0 0; }
+
+  /* ---------- Kontakt-/Infokarten ---------- */
+  .kontakt-card, .info-card{ display:flex; align-items:center; gap:12px; background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:13px 14px; margin-bottom:8px; }
   .kontakt-info{ flex:1; min-width:0; }
   .kontakt-name{ font-weight:600; font-size:15px; }
   .kontakt-rolle{ color:var(--text-muted); font-size:13px; margin-top:1px; }
-  .kontakt-nummer{
-    font-family:var(--mono);
-    font-size:14px;
-    color:var(--accent);
-    margin-top:3px;
-  }
-  .call-btn{
-    background:var(--bg-elev-2);
-    border:1px solid var(--border);
-    color:var(--text);
-    width:40px; height:40px;
-    border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    flex-shrink:0;
-    cursor:pointer;
-    text-decoration:none;
-  }
+  .kontakt-nummer{ font-family:var(--mono); font-size:14px; color:var(--accent); margin-top:3px; }
+  .call-btn{ background:var(--bg-elev-2); border:1px solid var(--border); color:var(--text); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; cursor:pointer; text-decoration:none; }
   .call-btn svg{ width:18px; height:18px; }
-  .empty-state{
-    text-align:center;
-    color:var(--text-muted);
-    font-size:14px;
-    padding:40px 20px;
-  }
+  .empty-state{ text-align:center; color:var(--text-muted); font-size:14px; padding:40px 20px; line-height:1.5; }
 
-  /* ---------- Notruf ---------- */
-  .notruf-wrap{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    padding:24px 8px 8px;
-  }
-  .notruf-btn{
-    width:180px; height:180px;
-    border-radius:50%;
-    background:var(--danger);
-    color:var(--danger-contrast);
-    border:none;
-    font-family:var(--mono);
-    font-size:15px;
-    font-weight:600;
-    letter-spacing:0.03em;
-    cursor:pointer;
-    box-shadow:0 0 0 8px rgba(193,67,46,0.14);
-  }
-  .notruf-btn:active{ transform:scale(0.97); }
-  .notruf-status{
-    margin-top:18px;
-    font-size:13px;
-    color:var(--text-muted);
-    text-align:center;
-    min-height:18px;
-  }
-  .notruf-settings{
-    margin-top:32px;
-    width:100%;
-    background:var(--bg-elev);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:16px;
-  }
-  .notruf-settings h3{
-    margin:0 0 12px;
-    font-size:13px;
-    color:var(--text-muted);
-    font-weight:600;
-  }
-
-  /* ---------- Info (Strecken/Baureihen) ---------- */
-  .info-toggle{
-    display:flex;
-    gap:8px;
-    margin-bottom:14px;
-  }
-  .info-toggle button{
-    flex:1;
-    padding:9px;
-    background:var(--bg-elev);
-    border:1px solid var(--border);
-    color:var(--text-muted);
-    border-radius:8px;
-    font-size:13px;
-    font-weight:600;
-    cursor:pointer;
-  }
-  .info-toggle button.active{
-    background:var(--accent);
-    color:var(--accent-contrast);
-    border-color:var(--accent);
-  }
-  .info-card{ align-items:flex-start; cursor:pointer; }
+  .info-card{ align-items:flex-start; cursor:pointer; flex-direction:column; }
   .info-titel{ font-weight:600; font-size:15px; }
   .info-detail{ color:var(--text-muted); font-size:13px; margin-top:2px; }
-  .info-body{
-    color:var(--text);
-    font-size:13.5px;
-    line-height:1.5;
-    margin-top:8px;
-    white-space:pre-wrap;
-  }
+  .info-body{ color:var(--text); font-size:13.5px; line-height:1.5; margin-top:8px; white-space:pre-wrap; }
+
+  .link-btn{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:14px; background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); color:var(--accent); font-size:15px; font-weight:600; text-decoration:none; margin-bottom:10px; }
+
+  /* ---------- Notruf ---------- */
+  .notruf-wrap{ display:flex; flex-direction:column; align-items:center; padding:16px 8px 8px; }
+  .notruf-btn{ width:180px; height:180px; border-radius:50%; background:var(--danger); color:var(--danger-contrast); border:none; font-family:var(--mono); font-size:15px; font-weight:600; letter-spacing:0.03em; cursor:pointer; box-shadow:0 0 0 8px rgba(193,67,46,0.14); }
+  .notruf-btn:active{ transform:scale(0.97); }
+  .notruf-status{ margin-top:18px; font-size:13px; color:var(--text-muted); text-align:center; min-height:18px; }
+  .notruf-settings{ margin-top:32px; width:100%; background:var(--bg-elev); border:1px solid var(--border); border-radius:var(--radius); padding:16px; }
+  .notruf-settings h3{ margin:0 0 12px; font-size:13px; color:var(--text-muted); font-weight:600; }
 
   /* ---------- Verwaltung ---------- */
   .verw-tabs{ display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
-  .verw-tabs button{
-    padding:8px 12px;
-    background:var(--bg-elev);
-    border:1px solid var(--border);
-    color:var(--text-muted);
-    border-radius:8px;
-    font-size:12.5px;
-    cursor:pointer;
-  }
+  .verw-tabs button{ padding:8px 12px; background:var(--bg-elev); border:1px solid var(--border); color:var(--text-muted); border-radius:8px; font-size:12.5px; cursor:pointer; }
   .verw-tabs button.active{ background:var(--accent); color:var(--accent-contrast); border-color:var(--accent); }
-  .verw-row{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    background:var(--bg-elev);
-    border:1px solid var(--border);
-    border-radius:8px;
-    padding:11px 12px;
-    margin-bottom:7px;
-  }
+  .verw-row{ display:flex; align-items:center; gap:10px; background:var(--bg-elev); border:1px solid var(--border); border-radius:8px; padding:11px 12px; margin-bottom:7px; }
   .verw-row .titel{ flex:1; font-size:14px; }
   .verw-row .titel .sub{ display:block; color:var(--text-muted); font-size:12px; }
-  .icon-btn{
-    background:none;
-    border:none;
-    color:var(--text-muted);
-    cursor:pointer;
-    padding:4px;
-    display:flex;
-  }
+  .icon-btn{ background:none; border:none; color:var(--text-muted); cursor:pointer; padding:4px; display:flex; }
   .icon-btn svg{ width:17px; height:17px; }
   .icon-btn.danger{ color:var(--danger); }
-  .add-btn{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    width:100%;
-    padding:11px;
-    background:transparent;
-    border:1px dashed var(--border);
-    color:var(--text-muted);
-    border-radius:8px;
-    font-size:13.5px;
-    cursor:pointer;
-    margin-top:6px;
-  }
+  .add-btn{ display:flex; align-items:center; justify-content:center; gap:6px; width:100%; padding:11px; background:transparent; border:1px dashed var(--border); color:var(--text-muted); border-radius:8px; font-size:13.5px; cursor:pointer; margin-top:6px; }
 
   /* ---------- Modal ---------- */
-  .modal-overlay{
-    position:fixed; inset:0;
-    background:rgba(0,0,0,0.55);
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-    z-index:50;
-  }
-  .modal{
-    width:100%;
-    max-width:480px;
-    background:var(--bg-elev);
-    border:1px solid var(--border);
-    border-radius:16px 16px 0 0;
-    padding:20px 18px calc(20px + env(safe-area-inset-bottom));
-    max-height:85vh;
-    overflow-y:auto;
-  }
+  .modal-overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.55); display:flex; align-items:flex-end; justify-content:center; z-index:50; }
+  .modal{ width:100%; max-width:480px; background:var(--bg-elev); border:1px solid var(--border); border-radius:16px 16px 0 0; padding:20px 18px calc(20px + env(safe-area-inset-bottom)); max-height:85vh; overflow-y:auto; }
   .modal h3{ margin:0 0 16px; font-size:16px; }
-  .modal .field textarea{
-    width:100%;
-    padding:11px 12px;
-    background:var(--bg-elev-2);
-    border:1px solid var(--border);
-    border-radius:8px;
-    color:var(--text);
-    font-size:14px;
-    min-height:80px;
-    resize:vertical;
-    font-family:var(--sans);
-  }
+  .modal .field textarea{ width:100%; padding:11px 12px; background:var(--bg-elev-2); border:1px solid var(--border); border-radius:8px; color:var(--text); font-size:14px; min-height:80px; resize:vertical; font-family:var(--sans); }
   .modal-actions{ display:flex; gap:10px; margin-top:6px; }
   .modal-actions .btn{ width:auto; flex:1; }
 
-  @media (min-width: 620px){
-    main{ padding-top:24px; }
-  }
+  @media (min-width: 620px){ main{ padding-top:24px; } }
 </style>
 </head>
 <body>
@@ -429,8 +140,8 @@
   <!-- ===================== LOGIN ===================== -->
   <div id="login-screen">
     <div class="brand">
-      <span class="brand-mark">DB</span>
-      <span class="brand-name">TfInfo</span>
+      <span class="brand-mark">Tf</span>
+      <span class="brand-name">Tfix</span>
     </div>
     <div class="login-card">
       <div class="field">
@@ -450,7 +161,10 @@
   <!-- ===================== APP ===================== -->
   <div id="app" class="hidden">
     <header class="topbar">
-      <span class="brand-name">Tfix</span>
+      <button class="topbar-back hidden" id="back-btn" aria-label="Zurück">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <span class="topbar-title" id="topbar-title">Tfix</span>
       <div class="user-chip">
         <span id="user-email"></span>
         <button id="logout-btn">Abmelden</button>
@@ -459,73 +173,140 @@
 
     <main>
 
-      <!-- Kontakte -->
-      <section class="view active" id="view-kontakte">
-        <h2 class="view-title">Kontakte</h2>
-        <input class="search" id="kontakte-search" placeholder="Name, Ort oder Rolle suchen …">
-        <div id="kontakte-liste"></div>
+      <!-- ===== Startmenü ===== -->
+      <section class="screen active" id="screen-home">
+        <div class="tile-grid">
+          <div class="tile" data-nav="platzhalter" data-titel="DB Fernverkehr">DB Fernverkehr</div>
+          <div class="tile" data-nav="bfstrecke" data-titel="Bf/Strecke">Bf/Strecke</div>
+          <div class="tile" data-nav="platzhalter" data-titel="Regelwerke">Regelwerke</div>
+          <div class="tile" data-nav="telefonbuch" data-titel="Telefonbuch">Telefonbuch</div>
+          <div class="tile" data-nav="platzhalter" data-titel="Zugfahrt">Zugfahrt</div>
+          <div class="tile" data-nav="technik" data-titel="Technik">Technik</div>
+          <div class="tile" data-nav="platzhalter" data-titel="Funktionen">Funktionen</div>
+          <div class="tile" data-nav="platzhalter" data-titel="Weg/Zeit">Weg/Zeit</div>
+          <div class="tile tile-accent" data-nav="sos" data-titel="SOS">SOS</div>
+          <div class="tile" data-nav="platzhalter" data-titel="Befehle">Befehle</div>
+        </div>
+        <div class="menu-list" style="margin-top:14px;">
+          <div class="menu-row" data-nav="verwaltung" data-titel="Verwaltung">
+            Verwaltung
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+        </div>
       </section>
 
-      <!-- Notruf -->
-      <section class="view" id="view-notruf">
-        <h2 class="view-title">Notruf</h2>
+      <!-- ===== Platzhalter (für noch nicht eingerichtete Bereiche) ===== -->
+      <section class="screen" id="screen-platzhalter">
+        <h2 class="view-title" id="platzhalter-titel"></h2>
+        <div class="empty-state">Dieser Bereich ist noch nicht eingerichtet.<br>Kommt nach und nach dazu.</div>
+      </section>
+
+      <!-- ===== Telefonbuch ===== -->
+      <section class="screen" id="screen-telefonbuch">
+        <h2 class="view-title">Telefonbuch</h2>
+        <input class="search" id="tb-search" placeholder="Betriebsstelle/Name oder Ril100">
+        <label class="checkbox-row"><input type="checkbox" id="tb-volltext"> Volltextsuche (auch Hinweis/Telefonnummer durchsuchen)</label>
+        <div class="kat-grid" id="tb-kategorien"></div>
+        <div id="tb-hinweis" class="kat-hint">Kategorie wählen, um Kontakte zu sehen.</div>
+        <div id="tb-liste"></div>
+      </section>
+
+      <!-- ===== Bf/Strecke Untermenü ===== -->
+      <section class="screen" id="screen-bfstrecke">
+        <h2 class="view-title">Bf/Strecke</h2>
+        <div class="menu-list">
+          <div class="menu-row" data-nav="bf-bahnhoefe" data-titel="Meine Bahnhöfe">Meine Bahnhöfe <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+          <div class="menu-row" data-nav="bf-rabatte" data-titel="Rabatte">Rabatte <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+          <div class="menu-row" data-nav="bf-abkuerzungen" data-titel="Abk./Ril100">Abk./Ril100 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+          <div class="menu-row" data-nav="bf-pausenraeume" data-titel="Pausenräume">Pausenräume <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+          <div class="menu-row" data-nav="bf-bahnhofsplaene" data-titel="Bahnhofspläne (online)">Bahnhofspläne (online) <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+          <div class="menu-row" data-nav="bf-osm" data-titel="OSM-Bahnhofsplan">OSM-Bahnhofsplan <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+          <div class="menu-row" data-nav="bf-streckenbuecher" data-titel="Streckenbücher">Streckenbücher <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+      </section>
+
+      <!-- ===== Bf/Strecke Unterseiten mit einfacher Suchliste (Bahnhöfe, Pausenräume, Rabatte) ===== -->
+      <section class="screen" id="screen-bf-bahnhoefe">
+        <h2 class="view-title">Meine Bahnhöfe</h2>
+        <input class="search" id="bf-bahnhoefe-search" placeholder="Suchen …">
+        <div id="bf-bahnhoefe-liste"></div>
+      </section>
+
+      <section class="screen" id="screen-bf-rabatte">
+        <h2 class="view-title">Rabatte</h2>
+        <input class="search" id="bf-rabatte-search" placeholder="Suchen …">
+        <div id="bf-rabatte-liste"></div>
+      </section>
+
+      <section class="screen" id="screen-bf-abkuerzungen">
+        <h2 class="view-title">Abk./Ril100</h2>
+        <input class="search" id="bf-abk-search" placeholder="Kürzel oder Bedeutung suchen …">
+        <div id="bf-abk-liste"></div>
+      </section>
+
+      <section class="screen" id="screen-bf-pausenraeume">
+        <h2 class="view-title">Pausenräume</h2>
+        <input class="search" id="bf-pause-search" placeholder="Suchen …">
+        <div id="bf-pause-liste"></div>
+      </section>
+
+      <section class="screen" id="screen-bf-bahnhofsplaene">
+        <h2 class="view-title">Bahnhofspläne (online)</h2>
+        <a class="link-btn" href="https://www.bahnhof.de" target="_blank" rel="noopener">Offizielle DB-Bahnhofspläne öffnen ↗</a>
+        <div class="subtle">Öffnet die offizielle bahnhof.de-Seite in einem neuen Tab.</div>
+      </section>
+
+      <section class="screen" id="screen-bf-osm">
+        <h2 class="view-title">OSM-Bahnhofsplan</h2>
+        <a class="link-btn" href="https://www.openstreetmap.org" target="_blank" rel="noopener">OpenStreetMap öffnen ↗</a>
+        <div class="subtle">Für einen konkreten Bahnhof direkt auf OSM nach Name/Ril100 suchen.</div>
+      </section>
+
+      <section class="screen" id="screen-bf-streckenbuecher">
+        <h2 class="view-title">Streckenbücher</h2>
+        <input class="search" id="strecken-search" placeholder="Suchen …">
+        <div id="strecken-liste"></div>
+      </section>
+
+      <!-- ===== Technik (Baureihen) ===== -->
+      <section class="screen" id="screen-technik">
+        <h2 class="view-title">Technik</h2>
+        <div class="subtle" style="margin-bottom:12px;">Baureihen-Infos. Weitere Technik-Inhalte folgen.</div>
+        <input class="search" id="baureihen-search" placeholder="Suchen …">
+        <div id="baureihen-liste"></div>
+      </section>
+
+      <!-- ===== SOS (Notruf) ===== -->
+      <section class="screen" id="screen-sos">
+        <h2 class="view-title">SOS</h2>
         <div class="notruf-wrap">
           <button class="notruf-btn" id="notruf-btn">NOTRUF<br>SENDEN</button>
           <div class="notruf-status" id="notruf-status">Sendet Standort per SMS an die hinterlegte Nummer.</div>
-
           <div class="notruf-settings">
             <h3>Zielnummer für Notruf-SMS</h3>
-            <div class="field">
-              <input id="notruf-nummer" placeholder="+49 …">
-            </div>
+            <div class="field"><input id="notruf-nummer" placeholder="+49 …"></div>
             <button class="btn btn-ghost" id="notruf-nummer-speichern">Speichern</button>
           </div>
         </div>
       </section>
 
-      <!-- Strecken / Baureihen -->
-      <section class="view" id="view-info">
-        <h2 class="view-title">Strecken &amp; Baureihen</h2>
-        <div class="info-toggle">
-          <button class="active" data-info="strecken">Strecken</button>
-          <button data-info="baureihen">Baureihen</button>
-        </div>
-        <input class="search" id="info-search" placeholder="Suchen …">
-        <div id="info-liste"></div>
-      </section>
-
-      <!-- Verwaltung -->
-      <section class="view" id="view-verwaltung">
+      <!-- ===== Verwaltung ===== -->
+      <section class="screen" id="screen-verwaltung">
         <h2 class="view-title">Verwaltung</h2>
         <div class="verw-tabs">
           <button class="active" data-verw="kontakte">Kontakte</button>
           <button data-verw="strecken">Strecken</button>
           <button data-verw="baureihen">Baureihen</button>
+          <button data-verw="bahnhoefe">Bahnhöfe</button>
+          <button data-verw="abkuerzungen">Abk./Ril100</button>
+          <button data-verw="pausenraeume">Pausenräume</button>
+          <button data-verw="rabatte">Rabatte</button>
           <button data-verw="nutzer">Nutzer</button>
         </div>
         <div id="verwaltung-liste"></div>
       </section>
 
     </main>
-
-    <nav class="tabbar">
-      <button class="tab-btn active" data-view="kontakte">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Kontakte
-      </button>
-      <button class="tab-btn" data-view="notruf">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L14.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
-        Notruf
-      </button>
-      <button class="tab-btn" data-view="info">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v16"/></svg>
-        Strecken
-      </button>
-      <button class="tab-btn hidden" id="tab-verwaltung" data-view="verwaltung">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-        Verwaltung
-      </button>
-    </nav>
   </div>
 
   <div id="modal-root"></div>
@@ -544,11 +325,13 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  let aktuellerNutzer = null;   // { uid, email, freigegeben, admin }
-  let unsubKontakte, unsubStrecken, unsubBaureihen;
-  let kontakteCache = [], streckenCache = [], baureihenCache = [];
-  let infoAktiv = 'strecken';
+  let aktuellerNutzer = null;
+  const unsub = {};
+  const cache = { kontakte:[], strecken:[], baureihen:[], bahnhoefe:[], abkuerzungen:[], pausenraeume:[], rabatte:[] };
   let verwAktiv = 'kontakte';
+  let tbKategorieAktiv = null;
+
+  const TELEFON_KATEGORIEN = ['Festnetz','Mobilnetz','Basa-Nummern','Langwahl','Ortsfunk/Kurzwahl'];
 
   // -------------------------------------------------------------
   // Login / Logout
@@ -562,7 +345,6 @@
     auth.signInWithEmailAndPassword(email, pw)
       .catch(err => { fehler.textContent = 'Anmeldung fehlgeschlagen: ' + uebersetzeFehler(err); });
   });
-
   document.getElementById('logout-btn').addEventListener('click', () => auth.signOut());
 
   function uebersetzeFehler(err){
@@ -573,9 +355,7 @@
   }
 
   auth.onAuthStateChanged(async (user) => {
-    if(unsubKontakte) unsubKontakte();
-    if(unsubStrecken) unsubStrecken();
-    if(unsubBaureihen) unsubBaureihen();
+    Object.values(unsub).forEach(fn => fn && fn());
 
     if(!user){
       aktuellerNutzer = null;
@@ -595,96 +375,251 @@
     document.getElementById('login-screen').classList.add('hidden');
     document.getElementById('app').classList.remove('hidden');
     document.getElementById('user-email').textContent = user.email;
-    document.getElementById('tab-verwaltung').classList.remove('hidden');
 
     ladeNotrufNummer();
     starteDatenListener();
+    navStack = ['home'];
+    zeigeScreen('home', 'Tfix');
+    renderTelefonbuchKategorien();
   });
 
   // -------------------------------------------------------------
-  // Tab-Navigation
+  // Navigation (Screen-Stack)
   // -------------------------------------------------------------
-  document.querySelectorAll('.tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.getElementById('view-' + btn.dataset.view).classList.add('active');
-    });
+  let navStack = ['home'];
+
+  function zeigeScreen(id, titel){
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + id).classList.add('active');
+    document.getElementById('topbar-title').textContent = titel;
+    document.getElementById('back-btn').classList.toggle('hidden', id === 'home');
+  }
+
+  function navigiereZu(id, titel){
+    navStack.push(id);
+    if(id === 'platzhalter') document.getElementById('platzhalter-titel').textContent = titel;
+    zeigeScreen(id, titel);
+    ladeDatenFuerScreen(id);
+  }
+
+  document.getElementById('back-btn').addEventListener('click', () => {
+    if(navStack.length > 1) navStack.pop();
+    const zielId = navStack[navStack.length - 1];
+    const titelMap = { home:'Tfix', telefonbuch:'Telefonbuch', bfstrecke:'Bf/Strecke', technik:'Technik', sos:'SOS', verwaltung:'Verwaltung' };
+    zeigeScreen(zielId, titelMap[zielId] || zielId);
   });
+
+  document.addEventListener('click', (e) => {
+    const nav = e.target.closest('[data-nav]');
+    if(nav){ navigiereZu(nav.dataset.nav, nav.dataset.titel); }
+  });
+
+  function ladeDatenFuerScreen(id){
+    if(id === 'verwaltung') renderVerwaltung();
+  }
 
   // -------------------------------------------------------------
   // Daten-Listener (live)
   // -------------------------------------------------------------
   function starteDatenListener(){
-    unsubKontakte = db.collection('kontakte').orderBy('name').onSnapshot(snap => {
-      kontakteCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderKontakte();
-      if(verwAktiv === 'kontakte') renderVerwaltung();
-    });
-    unsubStrecken = db.collection('strecken').orderBy('name').onSnapshot(snap => {
-      streckenCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderInfo();
-      if(verwAktiv === 'strecken') renderVerwaltung();
-    });
-    unsubBaureihen = db.collection('baureihen').orderBy('bezeichnung').onSnapshot(snap => {
-      baureihenCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderInfo();
-      if(verwAktiv === 'baureihen') renderVerwaltung();
-    });
+    const bind = (collection, orderField) => {
+      unsub[collection] = db.collection(collection).orderBy(orderField).onSnapshot(snap => {
+        cache[collection] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderAlles();
+      });
+    };
+    bind('kontakte', 'name');
+    bind('strecken', 'name');
+    bind('baureihen', 'bezeichnung');
+    bind('bahnhoefe', 'name');
+    bind('abkuerzungen', 'kuerzel');
+    bind('pausenraeume', 'ort');
+    bind('rabatte', 'titel');
+  }
+
+  function renderAlles(){
+    renderTelefonbuch();
+    renderEinfacheListe('bahnhoefe');
+    renderEinfacheListe('pausenraeume');
+    renderEinfacheListe('rabatte');
+    renderAbkuerzungen();
+    renderStrecken();
+    renderBaureihen();
+    if(document.getElementById('screen-verwaltung').classList.contains('active')) renderVerwaltung();
   }
 
   // -------------------------------------------------------------
-  // Kontakte
+  // Telefonbuch
   // -------------------------------------------------------------
-  document.getElementById('kontakte-search').addEventListener('input', renderKontakte);
+  function renderTelefonbuchKategorien(){
+    const wrap = document.getElementById('tb-kategorien');
+    wrap.innerHTML = TELEFON_KATEGORIEN.map(k => `<div class="kat-btn ${tbKategorieAktiv===k?'active':''}" data-kat="${k}">${k}</div>`).join('');
+    wrap.querySelectorAll('.kat-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        tbKategorieAktiv = tbKategorieAktiv === btn.dataset.kat ? null : btn.dataset.kat;
+        renderTelefonbuchKategorien();
+        renderTelefonbuch();
+      });
+    });
+  }
+  document.getElementById('tb-search').addEventListener('input', renderTelefonbuch);
+  document.getElementById('tb-volltext').addEventListener('change', renderTelefonbuch);
 
-  function renderKontakte(){
-    const q = document.getElementById('kontakte-search').value.trim().toLowerCase();
-    const liste = document.getElementById('kontakte-liste');
-    const gefiltert = kontakteCache.filter(k =>
-      !q || [k.name, k.rolle, k.ort, k.kategorie].filter(Boolean).join(' ').toLowerCase().includes(q)
-    );
-
-    if(gefiltert.length === 0){
-      liste.innerHTML = '<div class="empty-state">Keine Kontakte gefunden.</div>';
+  function renderTelefonbuch(){
+    const liste = document.getElementById('tb-liste');
+    const hinweis = document.getElementById('tb-hinweis');
+    if(!tbKategorieAktiv){
+      liste.innerHTML = '';
+      hinweis.classList.remove('hidden');
+      hinweis.textContent = 'Kategorie wählen, um Kontakte zu sehen.';
       return;
     }
-
-    const gruppen = {};
-    gefiltert.forEach(k => {
-      const key = k.kategorie || 'Sonstige';
-      (gruppen[key] ||= []).push(k);
+    hinweis.classList.add('hidden');
+    const q = document.getElementById('tb-search').value.trim().toLowerCase();
+    const volltext = document.getElementById('tb-volltext').checked;
+    const treffer = cache.kontakte.filter(k => {
+      if((k.kategorie || '') !== tbKategorieAktiv) return false;
+      if(!q) return true;
+      const basis = [k.name, k.ril100].filter(Boolean).join(' ').toLowerCase();
+      if(basis.includes(q)) return true;
+      if(volltext){
+        return [k.telefon, k.hinweis].filter(Boolean).join(' ').toLowerCase().includes(q);
+      }
+      return false;
     });
-
-    liste.innerHTML = Object.keys(gruppen).sort().map(kat => `
-      <div class="kategorie-label">${escapeHtml(kat)}</div>
-      ${gruppen[kat].map(k => `
-        <div class="kontakt-card">
-          <div class="kontakt-info">
-            <div class="kontakt-name">${escapeHtml(k.name || '')}</div>
-            <div class="kontakt-rolle">${escapeHtml([k.rolle, k.ort].filter(Boolean).join(' · '))}</div>
-            <div class="kontakt-nummer">${escapeHtml(k.telefon || '')}</div>
-          </div>
-          ${k.telefon ? `
-            <a class="call-btn" href="tel:${encodeURIComponent(k.telefon)}" aria-label="Anrufen">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            </a>` : ''}
+    if(treffer.length === 0){
+      liste.innerHTML = '<div class="empty-state">Keine Kontakte in dieser Kategorie gefunden.</div>';
+      return;
+    }
+    liste.innerHTML = treffer.map(k => `
+      <div class="kontakt-card">
+        <div class="kontakt-info">
+          <div class="kontakt-name">${escapeHtml(k.name || '')}${k.ril100 ? ` <span class="subtle">(${escapeHtml(k.ril100)})</span>` : ''}</div>
+          ${k.hinweis ? `<div class="kontakt-rolle">${escapeHtml(k.hinweis)}</div>` : ''}
+          <div class="kontakt-nummer">${escapeHtml(k.telefon || '')}</div>
         </div>
-      `).join('')}
+        ${k.telefon ? `<a class="call-btn" href="tel:${encodeURIComponent(k.telefon)}" aria-label="Anrufen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></a>` : ''}
+      </div>
     `).join('');
   }
 
   // -------------------------------------------------------------
-  // Notruf
+  // Einfache Listen (Bahnhöfe, Pausenräume, Rabatte)
+  // -------------------------------------------------------------
+  const EINFACHE_LISTEN = {
+    bahnhoefe: { searchId:'bf-bahnhoefe-search', listeId:'bf-bahnhoefe-liste', titel:e=>e.name, detail:e=>e.ril100, body:e=>e.info },
+    pausenraeume: { searchId:'bf-pause-search', listeId:'bf-pause-liste', titel:e=>e.ort, detail:()=>null, body:e=>e.info },
+    rabatte: { searchId:'bf-rabatte-search', listeId:'bf-rabatte-liste', titel:e=>e.titel, detail:()=>null, body:e=>e.info },
+  };
+  const offeneEintraege = {};
+
+  Object.keys(EINFACHE_LISTEN).forEach(key => {
+    document.getElementById(EINFACHE_LISTEN[key].searchId).addEventListener('input', () => renderEinfacheListe(key));
+  });
+
+  function renderEinfacheListe(key){
+    const cfg = EINFACHE_LISTEN[key];
+    const q = document.getElementById(cfg.searchId).value.trim().toLowerCase();
+    const liste = document.getElementById(cfg.listeId);
+    const gefiltert = cache[key].filter(e => !q || [cfg.titel(e), cfg.detail(e), e.info].filter(Boolean).join(' ').toLowerCase().includes(q));
+    if(gefiltert.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Einträge gefunden.</div>'; return; }
+    liste.innerHTML = gefiltert.map(e => {
+      const offen = offeneEintraege[key] === e.id;
+      return `
+        <div class="info-card" data-id="${e.id}" data-key="${key}">
+          <div class="info-titel">${escapeHtml(cfg.titel(e) || '')}</div>
+          ${cfg.detail(e) ? `<div class="info-detail">${escapeHtml(cfg.detail(e))}</div>` : ''}
+          ${offen && cfg.body(e) ? `<div class="info-body">${escapeHtml(cfg.body(e))}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+    liste.querySelectorAll('.info-card').forEach(card => {
+      card.addEventListener('click', () => {
+        offeneEintraege[key] = offeneEintraege[key] === card.dataset.id ? null : card.dataset.id;
+        renderEinfacheListe(key);
+      });
+    });
+  }
+
+  // -------------------------------------------------------------
+  // Abkürzungen / Ril100
+  // -------------------------------------------------------------
+  document.getElementById('bf-abk-search').addEventListener('input', renderAbkuerzungen);
+  function renderAbkuerzungen(){
+    const q = document.getElementById('bf-abk-search').value.trim().toLowerCase();
+    const liste = document.getElementById('bf-abk-liste');
+    const gefiltert = cache.abkuerzungen.filter(a => !q || [a.kuerzel, a.bedeutung].filter(Boolean).join(' ').toLowerCase().includes(q));
+    if(gefiltert.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Einträge gefunden.</div>'; return; }
+    liste.innerHTML = gefiltert.map(a => `
+      <div class="kontakt-card">
+        <div class="kontakt-info">
+          <div class="kontakt-name">${escapeHtml(a.kuerzel || '')}</div>
+          <div class="kontakt-rolle">${escapeHtml(a.bedeutung || '')}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // -------------------------------------------------------------
+  // Streckenbücher
+  // -------------------------------------------------------------
+  document.getElementById('strecken-search').addEventListener('input', renderStrecken);
+  function renderStrecken(){
+    const q = document.getElementById('strecken-search').value.trim().toLowerCase();
+    const liste = document.getElementById('strecken-liste');
+    const gefiltert = cache.strecken.filter(e => !q || [e.name, e.kilometrierung, e.info].filter(Boolean).join(' ').toLowerCase().includes(q));
+    if(gefiltert.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Einträge gefunden.</div>'; return; }
+    liste.innerHTML = gefiltert.map(e => {
+      const offen = offeneEintraege.strecken === e.id;
+      return `
+        <div class="info-card" data-id="${e.id}" data-key="strecken">
+          <div class="info-titel">${escapeHtml(e.name || '')}</div>
+          ${e.kilometrierung ? `<div class="info-detail">${escapeHtml(e.kilometrierung)}</div>` : ''}
+          ${offen && e.info ? `<div class="info-body">${escapeHtml(e.info)}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+    liste.querySelectorAll('.info-card').forEach(card => {
+      card.addEventListener('click', () => {
+        offeneEintraege.strecken = offeneEintraege.strecken === card.dataset.id ? null : card.dataset.id;
+        renderStrecken();
+      });
+    });
+  }
+
+  // -------------------------------------------------------------
+  // Technik / Baureihen
+  // -------------------------------------------------------------
+  document.getElementById('baureihen-search').addEventListener('input', renderBaureihen);
+  function renderBaureihen(){
+    const q = document.getElementById('baureihen-search').value.trim().toLowerCase();
+    const liste = document.getElementById('baureihen-liste');
+    const gefiltert = cache.baureihen.filter(e => !q || [e.bezeichnung, e.kategorie, e.info].filter(Boolean).join(' ').toLowerCase().includes(q));
+    if(gefiltert.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Einträge gefunden.</div>'; return; }
+    liste.innerHTML = gefiltert.map(e => {
+      const offen = offeneEintraege.baureihen === e.id;
+      return `
+        <div class="info-card" data-id="${e.id}" data-key="baureihen">
+          <div class="info-titel">${escapeHtml(e.bezeichnung || '')}</div>
+          ${e.kategorie ? `<div class="info-detail">${escapeHtml(e.kategorie)}</div>` : ''}
+          ${offen && e.info ? `<div class="info-body">${escapeHtml(e.info)}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+    liste.querySelectorAll('.info-card').forEach(card => {
+      card.addEventListener('click', () => {
+        offeneEintraege.baureihen = offeneEintraege.baureihen === card.dataset.id ? null : card.dataset.id;
+        renderBaureihen();
+      });
+    });
+  }
+
+  // -------------------------------------------------------------
+  // Notruf (SOS)
   // -------------------------------------------------------------
   document.getElementById('notruf-btn').addEventListener('click', () => {
     const status = document.getElementById('notruf-status');
-    if(!navigator.geolocation){
-      status.textContent = 'Standort auf diesem Gerät nicht verfügbar. SMS ohne Standort wird vorbereitet.';
-      sendeNotrufSms(null);
-      return;
-    }
+    if(!navigator.geolocation){ status.textContent = 'Standort auf diesem Gerät nicht verfügbar. SMS ohne Standort wird vorbereitet.'; sendeNotrufSms(null); return; }
     status.textContent = 'Standort wird ermittelt …';
     navigator.geolocation.getCurrentPosition(
       pos => sendeNotrufSms(pos.coords),
@@ -698,11 +633,8 @@
     const nummer = document.getElementById('notruf-nummer').value.trim();
     if(!nummer){ status.textContent = 'Bitte zuerst eine Zielnummer hinterlegen.'; return; }
     let text = 'Notruf Tfix';
-    if(coords){
-      text += ` – Standort: https://maps.google.com/?q=${coords.latitude},${coords.longitude}`;
-    }
+    if(coords) text += ` – Standort: https://maps.google.com/?q=${coords.latitude},${coords.longitude}`;
     status.textContent = coords ? 'Standort ermittelt. SMS wird geöffnet …' : 'SMS wird geöffnet …';
-    // sms:-Link funktioniert plattformabhängig mit ? oder &
     const trenner = /iPad|iPhone|iPod/.test(navigator.userAgent) ? '&' : '?';
     window.location.href = `sms:${encodeURIComponent(nummer)}${trenner}body=${encodeURIComponent(text)}`;
   }
@@ -711,65 +643,11 @@
     const doc = await db.collection('einstellungen').doc(aktuellerNutzer.uid).get();
     document.getElementById('notruf-nummer').value = doc.exists ? (doc.data().notrufNummer || '') : '';
   }
-
   document.getElementById('notruf-nummer-speichern').addEventListener('click', async () => {
     const nummer = document.getElementById('notruf-nummer').value.trim();
     await db.collection('einstellungen').doc(aktuellerNutzer.uid).set({ notrufNummer: nummer }, { merge: true });
     document.getElementById('notruf-status').textContent = 'Nummer gespeichert.';
   });
-
-  // -------------------------------------------------------------
-  // Strecken / Baureihen (Ansicht)
-  // -------------------------------------------------------------
-  document.querySelectorAll('.info-toggle button').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.info-toggle button').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      infoAktiv = btn.dataset.info;
-      renderInfo();
-    });
-  });
-  document.getElementById('info-search').addEventListener('input', renderInfo);
-
-  let offeneInfoId = null;
-
-  function renderInfo(){
-    const q = document.getElementById('info-search').value.trim().toLowerCase();
-    const liste = document.getElementById('info-liste');
-    const quelle = infoAktiv === 'strecken' ? streckenCache : baureihenCache;
-
-    const gefiltert = quelle.filter(e => {
-      const titel = infoAktiv === 'strecken' ? e.name : e.bezeichnung;
-      return !q || [titel, e.info].filter(Boolean).join(' ').toLowerCase().includes(q);
-    });
-
-    if(gefiltert.length === 0){
-      liste.innerHTML = `<div class="empty-state">Keine Einträge gefunden.</div>`;
-      return;
-    }
-
-    liste.innerHTML = gefiltert.map(e => {
-      const titel = infoAktiv === 'strecken' ? e.name : e.bezeichnung;
-      const detail = infoAktiv === 'strecken' ? e.kilometrierung : e.kategorie;
-      const offen = offeneInfoId === e.id;
-      return `
-        <div class="info-card" data-id="${e.id}">
-          <div style="flex:1;">
-            <div class="info-titel">${escapeHtml(titel || '')}</div>
-            ${detail ? `<div class="info-detail">${escapeHtml(detail)}</div>` : ''}
-            ${offen && e.info ? `<div class="info-body">${escapeHtml(e.info)}</div>` : ''}
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    liste.querySelectorAll('.info-card').forEach(card => {
-      card.addEventListener('click', () => {
-        offeneInfoId = offeneInfoId === card.dataset.id ? null : card.dataset.id;
-        renderInfo();
-      });
-    });
-  }
 
   // -------------------------------------------------------------
   // Verwaltung
@@ -789,24 +667,28 @@
     nutzerCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   }
 
+  const VERW_CONFIG = {
+    kontakte: { titel:e=>e.name, sub:e=>[e.kategorie, e.telefon].filter(Boolean).join(' · ') },
+    strecken: { titel:e=>e.name, sub:e=>e.kilometrierung },
+    baureihen: { titel:e=>e.bezeichnung, sub:e=>e.kategorie },
+    bahnhoefe: { titel:e=>e.name, sub:e=>e.ril100 },
+    abkuerzungen: { titel:e=>e.kuerzel, sub:e=>e.bedeutung },
+    pausenraeume: { titel:e=>e.ort, sub:()=>'' },
+    rabatte: { titel:e=>e.titel, sub:()=>'' },
+  };
+
   async function renderVerwaltung(){
     const liste = document.getElementById('verwaltung-liste');
 
     if(verwAktiv === 'nutzer'){
-      if(!aktuellerNutzer.admin){
-        liste.innerHTML = '<div class="empty-state">Nur Admins können Nutzer verwalten.</div>';
-        return;
-      }
+      if(!aktuellerNutzer.admin){ liste.innerHTML = '<div class="empty-state">Nur Admins können Nutzer verwalten.</div>'; return; }
       await ladeNutzerCache();
       liste.innerHTML = nutzerCache.map(n => `
         <div class="verw-row">
           <div class="titel">${escapeHtml(n.email || n.id)}<span class="sub">${n.freigegeben ? 'freigegeben' : 'nicht freigegeben'}${n.admin ? ' · Admin' : ''}</span></div>
-          <button class="icon-btn" data-toggle-freigabe="${n.id}" title="Freigabe umschalten">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
-          </button>
+          <button class="icon-btn" data-toggle-freigabe="${n.id}" title="Freigabe umschalten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></button>
         </div>
       `).join('') + `<div class="empty-state" style="padding-top:8px;">Neue Konten werden in der Firebase-Konsole unter Authentication angelegt und erscheinen hier automatisch beim ersten Login zur Freigabe.</div>`;
-
       liste.querySelectorAll('[data-toggle-freigabe]').forEach(b => {
         b.addEventListener('click', async () => {
           const id = b.dataset.toggleFreigabe;
@@ -818,22 +700,18 @@
       return;
     }
 
-    const config = {
-      kontakte: { cache: kontakteCache, titel: e => e.name, sub: e => [e.rolle, e.telefon].filter(Boolean).join(' · '), collection: 'kontakte' },
-      strecken: { cache: streckenCache, titel: e => e.name, sub: e => e.kilometrierung, collection: 'strecken' },
-      baureihen: { cache: baureihenCache, titel: e => e.bezeichnung, sub: e => e.kategorie, collection: 'baureihen' },
-    }[verwAktiv];
-
-    liste.innerHTML = config.cache.map(e => `
+    const cfg = VERW_CONFIG[verwAktiv];
+    const daten = cache[verwAktiv] || [];
+    liste.innerHTML = daten.map(e => `
       <div class="verw-row">
-        <div class="titel">${escapeHtml(config.titel(e) || '')}<span class="sub">${escapeHtml(config.sub(e) || '')}</span></div>
+        <div class="titel">${escapeHtml(cfg.titel(e) || '')}<span class="sub">${escapeHtml(cfg.sub(e) || '')}</span></div>
         <button class="icon-btn" data-edit="${e.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
         <button class="icon-btn danger" data-delete="${e.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg></button>
       </div>
     `).join('') + `<button class="add-btn" id="verw-add">+ Neuer Eintrag</button>`;
 
-    liste.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => oeffneFormular(verwAktiv, config.cache.find(x => x.id === b.dataset.edit))));
-    liste.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => loescheEintrag(config.collection, b.dataset.delete)));
+    liste.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => oeffneFormular(verwAktiv, daten.find(x => x.id === b.dataset.edit))));
+    liste.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => loescheEintrag(verwAktiv, b.dataset.delete)));
     document.getElementById('verw-add').addEventListener('click', () => oeffneFormular(verwAktiv, null));
   }
 
@@ -843,25 +721,42 @@
   }
 
   // -------------------------------------------------------------
-  // Formular-Modal für Kontakte / Strecken / Baureihen
+  // Formular-Modal
   // -------------------------------------------------------------
   const FORMULAR_FELDER = {
     kontakte: [
-      { key: 'name', label: 'Name', typ: 'text' },
-      { key: 'rolle', label: 'Rolle (z. B. Fdl, Weichenwärter)', typ: 'text' },
-      { key: 'ort', label: 'Ort / Stellwerk', typ: 'text' },
-      { key: 'telefon', label: 'Telefonnummer / Kurzwahl', typ: 'text' },
-      { key: 'kategorie', label: 'Kategorie (Gruppierung in der Liste)', typ: 'text' },
+      { key:'name', label:'Betriebsstelle/Name', typ:'text' },
+      { key:'ril100', label:'Ril100-Kürzel', typ:'text' },
+      { key:'kategorie', label:'Kategorie', typ:'select', optionen:TELEFON_KATEGORIEN },
+      { key:'telefon', label:'Telefonnummer/Kurzwahl', typ:'text' },
+      { key:'hinweis', label:'Hinweis (optional)', typ:'text' },
     ],
     strecken: [
-      { key: 'name', label: 'Streckenname', typ: 'text' },
-      { key: 'kilometrierung', label: 'Kilometrierung / Kurzangabe', typ: 'text' },
-      { key: 'info', label: 'Besonderheiten', typ: 'textarea' },
+      { key:'name', label:'Streckenname', typ:'text' },
+      { key:'kilometrierung', label:'Kilometrierung/Kurzangabe', typ:'text' },
+      { key:'info', label:'Besonderheiten', typ:'textarea' },
     ],
     baureihen: [
-      { key: 'bezeichnung', label: 'Bezeichnung', typ: 'text' },
-      { key: 'kategorie', label: 'Kategorie', typ: 'text' },
-      { key: 'info', label: 'Besonderheiten', typ: 'textarea' },
+      { key:'bezeichnung', label:'Bezeichnung', typ:'text' },
+      { key:'kategorie', label:'Kategorie', typ:'text' },
+      { key:'info', label:'Besonderheiten', typ:'textarea' },
+    ],
+    bahnhoefe: [
+      { key:'name', label:'Bahnhofsname', typ:'text' },
+      { key:'ril100', label:'Ril100-Kürzel', typ:'text' },
+      { key:'info', label:'Hinweise', typ:'textarea' },
+    ],
+    abkuerzungen: [
+      { key:'kuerzel', label:'Kürzel', typ:'text' },
+      { key:'bedeutung', label:'Bedeutung', typ:'text' },
+    ],
+    pausenraeume: [
+      { key:'ort', label:'Ort/Bahnhof', typ:'text' },
+      { key:'info', label:'Hinweise (Lage, Zugang, Ausstattung)', typ:'textarea' },
+    ],
+    rabatte: [
+      { key:'titel', label:'Titel', typ:'text' },
+      { key:'info', label:'Details', typ:'textarea' },
     ],
   };
 
@@ -877,6 +772,8 @@
               <label>${escapeHtml(f.label)}</label>
               ${f.typ === 'textarea'
                 ? `<textarea data-key="${f.key}">${escapeHtml(eintrag?.[f.key] || '')}</textarea>`
+                : f.typ === 'select'
+                ? `<select data-key="${f.key}"><option value="">–</option>${f.optionen.map(o => `<option value="${escapeHtml(o)}" ${eintrag?.[f.key]===o?'selected':''}>${escapeHtml(o)}</option>`).join('')}</select>`
                 : `<input data-key="${f.key}" value="${escapeHtml(eintrag?.[f.key] || '')}">`}
             </div>
           `).join('')}
@@ -892,12 +789,8 @@
     document.getElementById('modal-speichern').addEventListener('click', async () => {
       const daten = {};
       felder.forEach(f => { daten[f.key] = root.querySelector(`[data-key="${f.key}"]`).value.trim(); });
-      const collection = typ;
-      if(eintrag){
-        await db.collection(collection).doc(eintrag.id).set(daten, { merge: true });
-      } else {
-        await db.collection(collection).add(daten);
-      }
+      if(eintrag){ await db.collection(typ).doc(eintrag.id).set(daten, { merge:true }); }
+      else { await db.collection(typ).add(daten); }
       root.innerHTML = '';
     });
   }

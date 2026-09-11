@@ -42,6 +42,26 @@ service cloud.firestore {
       allow write: if istBearbeiter();
     }
 
+    match /bahnhoefe/{id} {
+      allow read: if istBearbeiter();
+      allow write: if istBearbeiter();
+    }
+
+    match /abkuerzungen/{id} {
+      allow read: if istBearbeiter();
+      allow write: if istBearbeiter();
+    }
+
+    match /pausenraeume/{id} {
+      allow read: if istBearbeiter();
+      allow write: if istBearbeiter();
+    }
+
+    match /rabatte/{id} {
+      allow read: if istBearbeiter();
+      allow write: if istBearbeiter();
+    }
+
     // Persönliche Notruf-Zielnummer je Nutzer
     match /einstellungen/{uid} {
       allow read, write: if istEingeloggt() && request.auth.uid == uid;

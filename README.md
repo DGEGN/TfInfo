@@ -1,7 +1,16 @@
 # Tfix-Nachbau
 
-Info-App für einen kleinen Kreis von Tf: Kontakte (Kurzwahlen), Notruf mit Standort-SMS,
-Strecken-/Baureihen-Infos. Läuft als Web-App im Browser (Handy, Tablet, PC).
+Info-App für einen kleinen Kreis von Tf, nachgebaut nach dem Startmenü des Originals:
+Telefonbuch (mit Ril100-Suche und Kategorien), Bf/Strecke (Meine Bahnhöfe, Rabatte,
+Abk./Ril100, Pausenräume, Bahnhofspläne, Streckenbücher), Technik (Baureihen) und SOS
+(Notruf mit Standort-SMS) sind bereits eingerichtet. DB Fernverkehr, Regelwerke, Zugfahrt,
+Funktionen, Weg/Zeit und Befehle sind als Platzhalter angelegt und können nach und nach
+befüllt werden. Läuft als Web-App im Browser (Handy, Tablet, PC).
+
+**Wichtig, falls du die Regeln schon einmal deployt hattest:** die aktualisierte
+`firestore.rules` (mit den neuen Collections `bahnhoefe`, `abkuerzungen`, `pausenraeume`,
+`rabatte`) muss erneut in der Firebase-Konsole eingefügt/veröffentlicht werden, sonst
+funktionieren diese neuen Bereiche nicht.
 
 ## 1. Firebase-Projekt einrichten
 
@@ -9,7 +18,13 @@ Strecken-/Baureihen-Infos. Läuft als Web-App im Browser (Handy, Tablet, PC).
 2. **Authentication** aktivieren → Anmeldemethode "E-Mail/Passwort" einschalten.
 3. **Firestore Database** anlegen (Produktionsmodus).
 4. Unter "Projekteinstellungen" → "Meine Apps" eine **Web-App** hinzufügen. Die dabei
-   angezeigten Config-Werte in `firebase-config.js` eintragen.
+   angezeigten Config-Werte in eine neue lokale Datei `firebase-config.js` eintragen
+   (Vorlage: `firebase-config.example.js` kopieren und umbenennen). `firebase-config.js`
+   steht in `.gitignore` und wird nicht mit committet.
+5. **API-Key einschränken** (empfohlen, auch wenn der Firebase-Web-Key kein klassisches
+   Geheimnis ist – siehe Hinweis unten): Google Cloud Console → APIs & Services →
+   Credentials → deinen Key auswählen → "Application restrictions" → "HTTP referrers" →
+   eure GitHub-Pages-URL eintragen. Damit funktioniert der Key nur noch von eurer Domain aus.
 5. Die Datei `firestore.rules` in der Firebase-Konsole unter Firestore → Regeln einfügen
    und veröffentlichen (oder per Firebase CLI deployen: `firebase deploy --only firestore:rules`).
 
@@ -46,6 +61,22 @@ enthalten – die trägt ihr selbst ein.
    Firestore-Regeln, nicht über Geheimhaltung der Config).
 2. Repo-Einstellungen → Pages → Branch auswählen, auf dem `index.html` liegt.
 3. Die von GitHub ausgegebene URL ist danach die App-Adresse für dich und deine Kollegen.
+
+## Hinweis zum "exposed secret"-Alert für den Google API Key
+
+GitHub meldet den Firebase-`apiKey` standardmäßig als Secret, weil es generisch alle
+Google-API-Keys so behandelt. Ein Firebase-**Web**-API-Key ist aber kein Bearer-Secret:
+er identifiziert nur das Projekt gegenüber Google und ist dafür gedacht, im
+Client-Code sichtbar zu sein. Zugriffsschutz für eure Daten kommt ausschließlich aus
+`firestore.rules` (freigegebene Nutzer) und Firebase Authentication, nicht aus der
+Geheimhaltung des Keys. Trotzdem sinnvoll, um den Alert loszuwerden und den Key sauber
+zu halten:
+- Key wie oben per HTTP-Referrer einschränken.
+- `firebase-config.js` nicht committen (liegt in `.gitignore`, nur `firebase-config.example.js`
+  mit Platzhaltern ist im Repo).
+- Falls ein echter Key bereits in der Git-Historie eines öffentlichen Repos gelandet ist:
+  in der Firebase-Konsole unter Projekteinstellungen einen neuen Web-API-Key erzeugen,
+  `firebase-config.js` lokal aktualisieren, alten Key in der Google Cloud Console löschen.
 
 ## Hinweise
 
