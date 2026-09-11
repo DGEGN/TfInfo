@@ -1,10 +1,10 @@
 // Trage hier die Konfigurationswerte aus deinem Firebase-Projekt ein.
 // Firebase-Konsole → Projekteinstellungen → "Meine Apps" → Web-App → Konfiguration
 window.TFIX_FIREBASE_CONFIG = {
-  apiKey: "AIzaSyA6gB4xskgydH3v6TtmvKpNgjlaSio_8IM",
-  authDomain: "verpflegungsstand.firebaseapp.com",
-  projectId: "verpflegungsstand",
-  storageBucket: "verpflegungsstand.firebasestorage.app",
-  messagingSenderId: "808275832434",
-  appId: "1:808275832434:web:efba324b3e1457f4fd5ceb"
+  apiKey: "AIzaSyAdI3bJr71jVZ_3aenJVl6dbS6dqsMLGEs",
+  authDomain: "tfinfo-edc5e.firebaseapp.com",
+  projectId: "tfinfo-edc5e",
+  storageBucket: "tfinfo-edc5e.firebasestorage.app",
+  messagingSenderId: "130883619416",
+  appId: "1:130883619416:web:efa00edecd33682ed8582d"
 };
