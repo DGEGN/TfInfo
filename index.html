@@ -176,13 +176,13 @@
       <!-- ===== Startmenü ===== -->
       <section class="screen active" id="screen-home">
         <div class="tile-grid">
-          <div class="tile" data-nav="platzhalter" data-titel="DB Fernverkehr">DB Fernverkehr</div>
+          <div class="tile" data-nav="fernverkehr" data-titel="Fernverkehr">DB Fernverkehr</div>
           <div class="tile" data-nav="bfstrecke" data-titel="Bf/Strecke">Bf/Strecke</div>
           <div class="tile" data-nav="platzhalter" data-titel="Regelwerke">Regelwerke</div>
           <div class="tile" data-nav="telefonbuch" data-titel="Telefonbuch">Telefonbuch</div>
           <div class="tile" data-nav="platzhalter" data-titel="Zugfahrt">Zugfahrt</div>
           <div class="tile" data-nav="technik" data-titel="Technik">Technik</div>
-          <div class="tile" data-nav="platzhalter" data-titel="Funktionen">Funktionen</div>
+          <div class="tile" data-nav="funktionen" data-titel="Funktionen">Funktionen</div>
           <div class="tile" data-nav="platzhalter" data-titel="Weg/Zeit">Weg/Zeit</div>
           <div class="tile tile-accent" data-nav="sos" data-titel="SOS">SOS</div>
           <div class="tile" data-nav="platzhalter" data-titel="Befehle">Befehle</div>
@@ -246,14 +246,18 @@
 
       <section class="screen" id="screen-bf-pausenraeume">
         <h2 class="view-title">Pausenräume</h2>
-        <input class="search" id="bf-pause-search" placeholder="Suchen …">
+        <input class="search" id="bf-pause-search-name" placeholder="Betriebsstelle/Name">
+        <input class="search" id="bf-pause-search-ril100" placeholder="Ril100">
+        <label class="checkbox-row"><input type="checkbox" id="bf-pause-volltext"> Volltextsuche (auch Lagebeschreibung durchsuchen)</label>
         <div id="bf-pause-liste"></div>
       </section>
 
       <section class="screen" id="screen-bf-bahnhofsplaene">
         <h2 class="view-title">Bahnhofspläne (online)</h2>
+        <input class="search" id="plan-suche" placeholder="Bahnhofsname oder Ril100">
+        <button class="btn btn-primary" id="plan-suchen-btn" style="margin-bottom:14px;">Bahnhofsplan suchen ↗</button>
         <a class="link-btn" href="https://www.bahnhof.de" target="_blank" rel="noopener">Offizielle DB-Bahnhofspläne öffnen ↗</a>
-        <div class="subtle">Öffnet die offizielle bahnhof.de-Seite in einem neuen Tab.</div>
+        <div class="subtle">"Bahnhofsplan suchen" öffnet eine Websuche nach dem offiziellen Plan zu deiner Eingabe. Ein direktes Offline-Speichern wie im Original ist in dieser Web-Version nicht eingebaut – Tipp: Seite im Browser als PDF speichern oder Lesezeichen setzen.</div>
       </section>
 
       <section class="screen" id="screen-bf-osm">
@@ -266,6 +270,33 @@
         <h2 class="view-title">Streckenbücher</h2>
         <input class="search" id="strecken-search" placeholder="Suchen …">
         <div id="strecken-liste"></div>
+      </section>
+
+      <!-- ===== DB Fernverkehr Untermenü ===== -->
+      <section class="screen" id="screen-fernverkehr">
+        <h2 class="view-title">DB Fernverkehr</h2>
+        <div class="menu-list">
+          <div class="menu-row" data-nav="fv-bremsberechnung" data-titel="Bremsberechnung ICE">Bremsberechnung ICE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+          <div class="menu-row" data-nav="fv-legende" data-titel="Legende Dienstauftrag">Legende Dienstauftrag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
+        </div>
+      </section>
+
+      <section class="screen" id="screen-fv-bremsberechnung">
+        <h2 class="view-title">Bremsberechnung ICE</h2>
+        <div class="empty-state">Bewusst nicht nachgebaut: Bremsberechnungen sind sicherheitsrelevant. Ohne die offizielle, geprüfte Formel/Tabelle aus dem Regelwerk lässt sich das nicht verantwortbar nachbilden.<br><br>Wer die offizielle Grundlage beisteuert, kann hier später eine echte Eingabemaske ergänzen.</div>
+      </section>
+
+      <section class="screen" id="screen-fv-legende">
+        <h2 class="view-title">Legende Dienstauftrag</h2>
+        <input class="search" id="legende-search" placeholder="Suchen …">
+        <div id="legende-liste"></div>
+      </section>
+
+      <!-- ===== Funktionen (Link-Liste "Online Auswahl") ===== -->
+      <section class="screen" id="screen-funktionen">
+        <h2 class="view-title">Funktionen</h2>
+        <div class="subtle" style="margin-bottom:12px;">Links zu hilfreichen Seiten/Apps – von euch selbst gepflegt.</div>
+        <div id="funktionen-liste"></div>
       </section>
 
       <!-- ===== Technik (Baureihen) ===== -->
@@ -301,6 +332,8 @@
           <button data-verw="abkuerzungen">Abk./Ril100</button>
           <button data-verw="pausenraeume">Pausenräume</button>
           <button data-verw="rabatte">Rabatte</button>
+          <button data-verw="funktionen">Funktionen-Links</button>
+          <button data-verw="legende">Legende Dienstauftrag</button>
           <button data-verw="nutzer">Nutzer</button>
         </div>
         <div id="verwaltung-liste"></div>
@@ -327,7 +360,7 @@
 
   let aktuellerNutzer = null;
   const unsub = {};
-  const cache = { kontakte:[], strecken:[], baureihen:[], bahnhoefe:[], abkuerzungen:[], pausenraeume:[], rabatte:[] };
+  const cache = { kontakte:[], strecken:[], baureihen:[], bahnhoefe:[], abkuerzungen:[], pausenraeume:[], rabatte:[], funktionen:[], legende:[] };
   let verwAktiv = 'kontakte';
   let tbKategorieAktiv = null;
 
@@ -378,7 +411,7 @@
 
     ladeNotrufNummer();
     starteDatenListener();
-    navStack = ['home'];
+    navStack = [{ id:'home', titel:'Tfix' }];
     zeigeScreen('home', 'Tfix');
     renderTelefonbuchKategorien();
   });
@@ -386,7 +419,7 @@
   // -------------------------------------------------------------
   // Navigation (Screen-Stack)
   // -------------------------------------------------------------
-  let navStack = ['home'];
+  let navStack = [{ id:'home', titel:'Tfix' }];
 
   function zeigeScreen(id, titel){
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -396,7 +429,7 @@
   }
 
   function navigiereZu(id, titel){
-    navStack.push(id);
+    navStack.push({ id, titel });
     if(id === 'platzhalter') document.getElementById('platzhalter-titel').textContent = titel;
     zeigeScreen(id, titel);
     ladeDatenFuerScreen(id);
@@ -404,9 +437,8 @@
 
   document.getElementById('back-btn').addEventListener('click', () => {
     if(navStack.length > 1) navStack.pop();
-    const zielId = navStack[navStack.length - 1];
-    const titelMap = { home:'Tfix', telefonbuch:'Telefonbuch', bfstrecke:'Bf/Strecke', technik:'Technik', sos:'SOS', verwaltung:'Verwaltung' };
-    zeigeScreen(zielId, titelMap[zielId] || zielId);
+    const ziel = navStack[navStack.length - 1];
+    zeigeScreen(ziel.id, ziel.titel);
   });
 
   document.addEventListener('click', (e) => {
@@ -433,18 +465,22 @@
     bind('baureihen', 'bezeichnung');
     bind('bahnhoefe', 'name');
     bind('abkuerzungen', 'kuerzel');
-    bind('pausenraeume', 'ort');
+    bind('pausenraeume', 'name');
     bind('rabatte', 'titel');
+    bind('funktionen', 'titel');
+    bind('legende', 'begriff');
   }
 
   function renderAlles(){
     renderTelefonbuch();
     renderEinfacheListe('bahnhoefe');
-    renderEinfacheListe('pausenraeume');
     renderEinfacheListe('rabatte');
     renderAbkuerzungen();
     renderStrecken();
     renderBaureihen();
+    renderPausenraeume();
+    renderFunktionen();
+    renderLegende();
     if(document.getElementById('screen-verwaltung').classList.contains('active')) renderVerwaltung();
   }
 
@@ -508,7 +544,6 @@
   // -------------------------------------------------------------
   const EINFACHE_LISTEN = {
     bahnhoefe: { searchId:'bf-bahnhoefe-search', listeId:'bf-bahnhoefe-liste', titel:e=>e.name, detail:e=>e.ril100, body:e=>e.info },
-    pausenraeume: { searchId:'bf-pause-search', listeId:'bf-pause-liste', titel:e=>e.ort, detail:()=>null, body:e=>e.info },
     rabatte: { searchId:'bf-rabatte-search', listeId:'bf-rabatte-liste', titel:e=>e.titel, detail:()=>null, body:e=>e.info },
   };
   const offeneEintraege = {};
@@ -550,14 +585,22 @@
     const liste = document.getElementById('bf-abk-liste');
     const gefiltert = cache.abkuerzungen.filter(a => !q || [a.kuerzel, a.bedeutung].filter(Boolean).join(' ').toLowerCase().includes(q));
     if(gefiltert.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Einträge gefunden.</div>'; return; }
-    liste.innerHTML = gefiltert.map(a => `
-      <div class="kontakt-card">
-        <div class="kontakt-info">
-          <div class="kontakt-name">${escapeHtml(a.kuerzel || '')}</div>
-          <div class="kontakt-rolle">${escapeHtml(a.bedeutung || '')}</div>
+    liste.innerHTML = gefiltert.map(a => {
+      const offen = offeneEintraege.abkuerzungen === a.id;
+      return `
+        <div class="info-card" data-id="${a.id}">
+          <div class="info-titel">${escapeHtml(a.kuerzel || '')}</div>
+          <div class="info-detail">${escapeHtml(a.bedeutung || '')}</div>
+          ${offen && a.quelle ? `<div class="info-body" style="background:#1B2340; margin:8px -14px -13px; padding:10px 14px; border-radius:0 0 var(--radius) var(--radius);">Quellenangabe:\n${escapeHtml(a.quelle)}</div>` : ''}
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('');
+    liste.querySelectorAll('.info-card').forEach(card => {
+      card.addEventListener('click', () => {
+        offeneEintraege.abkuerzungen = offeneEintraege.abkuerzungen === card.dataset.id ? null : card.dataset.id;
+        renderAbkuerzungen();
+      });
+    });
   }
 
   // -------------------------------------------------------------
@@ -585,6 +628,75 @@
         renderStrecken();
       });
     });
+  }
+
+  // -------------------------------------------------------------
+  // Bahnhofsplan-Suche (öffnet Websuche in neuem Tab)
+  // -------------------------------------------------------------
+  document.getElementById('plan-suchen-btn').addEventListener('click', () => {
+    const eingabe = document.getElementById('plan-suche').value.trim();
+    if(!eingabe) return;
+    const url = 'https://www.google.com/search?q=' + encodeURIComponent(eingabe + ' Bahnhofsplan bahnhof.de');
+    window.open(url, '_blank', 'noopener');
+  });
+
+  // -------------------------------------------------------------
+  // Pausenräume (eigene Suche: Name + Ril100 + Volltext)
+  // -------------------------------------------------------------
+  ['bf-pause-search-name','bf-pause-search-ril100','bf-pause-volltext'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener(el.type === 'checkbox' ? 'change' : 'input', renderPausenraeume);
+  });
+
+  function renderPausenraeume(){
+    const qName = document.getElementById('bf-pause-search-name').value.trim().toLowerCase();
+    const qRil = document.getElementById('bf-pause-search-ril100').value.trim().toLowerCase();
+    const volltext = document.getElementById('bf-pause-volltext').checked;
+    const liste = document.getElementById('bf-pause-liste');
+    const treffer = cache.pausenraeume.filter(e => {
+      const nameTreffer = !qName || (e.name || '').toLowerCase().includes(qName) || (volltext && (e.ort || '').toLowerCase().includes(qName));
+      const rilTreffer = !qRil || (e.ril100 || '').toLowerCase().includes(qRil);
+      return nameTreffer && rilTreffer;
+    });
+    if(treffer.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Pausenräume gefunden.</div>'; return; }
+    liste.innerHTML = treffer.map(e => `
+      <div class="kontakt-card">
+        <div class="kontakt-info">
+          <div class="kontakt-name">${escapeHtml(e.name || '')}${e.ril100 ? ` <span class="subtle">(${escapeHtml(e.ril100)})</span>` : ''}</div>
+          <div class="kontakt-rolle">${escapeHtml(e.ort || '')}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  // -------------------------------------------------------------
+  // Funktionen (Link-Liste "Online Auswahl")
+  // -------------------------------------------------------------
+  function renderFunktionen(){
+    const liste = document.getElementById('funktionen-liste');
+    if(cache.funktionen.length === 0){ liste.innerHTML = '<div class="empty-state">Noch keine Links hinterlegt. Über Verwaltung → Funktionen-Links ergänzen.</div>'; return; }
+    liste.innerHTML = cache.funktionen.map(f => `
+      <a class="link-btn" href="${escapeHtml(f.url || '#')}" target="_blank" rel="noopener">${escapeHtml(f.titel || '')} ↗</a>
+    `).join('');
+  }
+
+  // -------------------------------------------------------------
+  // Legende Dienstauftrag (Begriff, Bedeutung)
+  // -------------------------------------------------------------
+  document.getElementById('legende-search').addEventListener('input', renderLegende);
+  function renderLegende(){
+    const q = document.getElementById('legende-search').value.trim().toLowerCase();
+    const liste = document.getElementById('legende-liste');
+    const gefiltert = cache.legende.filter(e => !q || [e.begriff, e.bedeutung].filter(Boolean).join(' ').toLowerCase().includes(q));
+    if(gefiltert.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Einträge gefunden.</div>'; return; }
+    liste.innerHTML = gefiltert.map(e => `
+      <div class="kontakt-card">
+        <div class="kontakt-info">
+          <div class="kontakt-name">${escapeHtml(e.begriff || '')}</div>
+          <div class="kontakt-rolle">${escapeHtml(e.bedeutung || '')}</div>
+        </div>
+      </div>
+    `).join('');
   }
 
   // -------------------------------------------------------------
@@ -673,8 +785,10 @@
     baureihen: { titel:e=>e.bezeichnung, sub:e=>e.kategorie },
     bahnhoefe: { titel:e=>e.name, sub:e=>e.ril100 },
     abkuerzungen: { titel:e=>e.kuerzel, sub:e=>e.bedeutung },
-    pausenraeume: { titel:e=>e.ort, sub:()=>'' },
+    pausenraeume: { titel:e=>e.name, sub:e=>[e.ril100, e.ort].filter(Boolean).join(' · ') },
     rabatte: { titel:e=>e.titel, sub:()=>'' },
+    funktionen: { titel:e=>e.titel, sub:e=>e.url },
+    legende: { titel:e=>e.begriff, sub:e=>e.bedeutung },
   };
 
   async function renderVerwaltung(){
@@ -749,14 +863,24 @@
     abkuerzungen: [
       { key:'kuerzel', label:'Kürzel', typ:'text' },
       { key:'bedeutung', label:'Bedeutung', typ:'text' },
+      { key:'quelle', label:'Quellenangabe (optional, z. B. Anhang 418.0300A02)', typ:'text' },
     ],
     pausenraeume: [
-      { key:'ort', label:'Ort/Bahnhof', typ:'text' },
-      { key:'info', label:'Hinweise (Lage, Zugang, Ausstattung)', typ:'textarea' },
+      { key:'name', label:'Bahnhofsname', typ:'text' },
+      { key:'ril100', label:'Ril100-Kürzel (optional)', typ:'text' },
+      { key:'ort', label:'Lagebeschreibung (z. B. "Gleis 1, 1.OG im ServiceCenter")', typ:'text' },
     ],
     rabatte: [
       { key:'titel', label:'Titel', typ:'text' },
       { key:'info', label:'Details', typ:'textarea' },
+    ],
+    funktionen: [
+      { key:'titel', label:'Titel', typ:'text' },
+      { key:'url', label:'Link (https://…)', typ:'text' },
+    ],
+    legende: [
+      { key:'begriff', label:'Begriff', typ:'text' },
+      { key:'bedeutung', label:'Bedeutung', typ:'text' },
     ],
   };
 

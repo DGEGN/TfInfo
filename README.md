@@ -2,15 +2,27 @@
 
 Info-App für einen kleinen Kreis von Tf, nachgebaut nach dem Startmenü des Originals:
 Telefonbuch (mit Ril100-Suche und Kategorien), Bf/Strecke (Meine Bahnhöfe, Rabatte,
-Abk./Ril100, Pausenräume, Bahnhofspläne, Streckenbücher), Technik (Baureihen) und SOS
-(Notruf mit Standort-SMS) sind bereits eingerichtet. DB Fernverkehr, Regelwerke, Zugfahrt,
-Funktionen, Weg/Zeit und Befehle sind als Platzhalter angelegt und können nach und nach
-befüllt werden. Läuft als Web-App im Browser (Handy, Tablet, PC).
+Abk./Ril100 mit optionaler Quellenangabe, Pausenräume mit Name/Ril100-Suche, Bahnhofspläne
+mit Plan-Suche, Streckenbücher), Technik (Baureihen), Funktionen (Link-Liste zu
+hilfreichen Seiten), DB Fernverkehr (Legende Dienstauftrag) und SOS (Notruf mit
+Standort-SMS) sind bereits eingerichtet. Regelwerke, Zugfahrt, Weg/Zeit und Befehle sind
+wie im Original ohne Funktion angelegt. Läuft als Web-App im Browser (Handy, Tablet, PC).
+
+**Funktionen-Links selbst befüllen:** über Verwaltung → Funktionen-Links könnt ihr eigene
+Links eintragen (Titel + URL). Zwei öffentlich bekannte Adressen zur Orientierung:
+DB Navigator → `https://www.bahn.de/app`, Fahrplan → `https://www.bahn.de`. Für interne
+Adressen wie RIS, Tf-Portal, DB Planet, DB Casino etc. kenne ich die genauen URLs nicht –
+die trägt ihr am besten selbst ein.
+
+**Bewusst nicht nachgebaut:** die "Bremsberechnung ICE" aus dem Original. Das ist eine
+sicherheitsrelevante Berechnung – die gehört nur mit der offiziellen, geprüften Formel
+aus dem Regelwerk rein, nicht als Nachbau aus Vermutung. Der Menüpunkt ist als Hinweis
+angelegt, falls ihr die offizielle Grundlage später ergänzen wollt.
 
 **Wichtig, falls du die Regeln schon einmal deployt hattest:** die aktualisierte
-`firestore.rules` (mit den neuen Collections `bahnhoefe`, `abkuerzungen`, `pausenraeume`,
-`rabatte`) muss erneut in der Firebase-Konsole eingefügt/veröffentlicht werden, sonst
-funktionieren diese neuen Bereiche nicht.
+`firestore.rules` (mit den Collections `bahnhoefe`, `abkuerzungen`, `pausenraeume`,
+`rabatte`, `funktionen`, `legende`) muss erneut in der Firebase-Konsole eingefügt/
+veröffentlicht werden, sonst funktionieren diese Bereiche nicht.
 
 ## 1. Firebase-Projekt einrichten
 
