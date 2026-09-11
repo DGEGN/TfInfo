@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Tfix – Info für Tf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1B1F24;
+    --bg-elev:#242930;
+    --bg-elev-2:#2C323B;
+    --border:#3A414B;
+    --text:#EDEBE3;
+    --text-muted:#9CA3AA;
+    --accent:#E8A33D;
+    --accent-contrast:#1B1F24;
+    --danger:#C1432E;
+    --danger-contrast:#FBEFEC;
+    --success:#4C8C6B;
+    --radius:10px;
+    --sans:'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+    --mono:'IBM Plex Mono', ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  button, input, select{ font-family:inherit; }
+  .hidden{ display:none !important; }
+
+  /* ---------- Login ---------- */
+  #login-screen{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin-bottom:28px;
+  }
+  .brand-mark{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:14px;
+    color:var(--bg);
+    background:var(--accent);
+    padding:3px 7px;
+    border-radius:5px;
+    letter-spacing:0.04em;
+  }
+  .brand-name{
+    font-size:22px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .login-card{
+    width:100%;
+    max-width:340px;
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:22px;
+  }
+  .field{ margin-bottom:14px; }
+  .field label{
+    display:block;
+    font-size:12px;
+    color:var(--text-muted);
+    margin-bottom:6px;
+  }
+  .field input{
+    width:100%;
+    padding:11px 12px;
+    background:var(--bg-elev-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--text);
+    font-size:15px;
+  }
+  .field input:focus{
+    outline:none;
+    border-color:var(--accent);
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    border:none;
+    border-radius:8px;
+    padding:12px 16px;
+    font-size:15px;
+    font-weight:600;
+    cursor:pointer;
+    width:100%;
+  }
+  .btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .btn-primary{ background:var(--accent); color:var(--accent-contrast); }
+  .btn-primary:active{ opacity:0.85; }
+  .btn-ghost{ background:transparent; color:var(--text-muted); border:1px solid var(--border); }
+  .login-error{
+    color:var(--danger);
+    font-size:13px;
+    margin-top:10px;
+    min-height:16px;
+  }
+  .login-hint{
+    color:var(--text-muted);
+    font-size:12px;
+    margin-top:18px;
+    max-width:340px;
+    text-align:center;
+    line-height:1.5;
+  }
+
+  /* ---------- App shell ---------- */
+  #app{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+  header.topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 18px;
+    border-bottom:1px solid var(--border);
+    background:var(--bg-elev);
+  }
+  header.topbar .brand-name{ font-size:17px; }
+  .user-chip{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13px;
+    color:var(--text-muted);
+  }
+  .user-chip button{
+    background:none;
+    border:none;
+    color:var(--text-muted);
+    text-decoration:underline;
+    font-size:13px;
+    cursor:pointer;
+    padding:0;
+  }
+  main{
+    flex:1;
+    width:100%;
+    max-width:640px;
+    margin:0 auto;
+    padding:18px 16px 90px;
+  }
+  .view{ display:none; }
+  .view.active{ display:block; }
+
+  h2.view-title{
+    font-size:19px;
+    font-weight:600;
+    margin:2px 0 16px;
+  }
+  .subtle{ color:var(--text-muted); font-size:13px; }
+
+  nav.tabbar{
+    position:fixed;
+    bottom:0; left:0; right:0;
+    display:flex;
+    background:var(--bg-elev);
+    border-top:1px solid var(--border);
+    padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+  }
+  nav.tabbar button{
+    flex:1;
+    background:none;
+    border:none;
+    color:var(--text-muted);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:3px;
+    padding:8px 4px;
+    font-size:11px;
+    border-radius:8px;
+    cursor:pointer;
+  }
+  nav.tabbar button svg{ width:20px; height:20px; }
+  nav.tabbar button.active{ color:var(--accent); }
+
+  /* ---------- Suche ---------- */
+  .search{
+    width:100%;
+    padding:11px 12px;
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--text);
+    font-size:15px;
+    margin-bottom:14px;
+  }
+  .search:focus{ outline:none; border-color:var(--accent); }
+
+  /* ---------- Kontaktliste ---------- */
+  .kategorie-label{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.03em;
+    color:var(--text-muted);
+    margin:18px 0 8px;
+  }
+  .kategorie-label:first-child{ margin-top:0; }
+  .kontakt-card, .info-card{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:13px 14px;
+    margin-bottom:8px;
+  }
+  .kontakt-info{ flex:1; min-width:0; }
+  .kontakt-name{ font-weight:600; font-size:15px; }
+  .kontakt-rolle{ color:var(--text-muted); font-size:13px; margin-top:1px; }
+  .kontakt-nummer{
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--accent);
+    margin-top:3px;
+  }
+  .call-btn{
+    background:var(--bg-elev-2);
+    border:1px solid var(--border);
+    color:var(--text);
+    width:40px; height:40px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    cursor:pointer;
+    text-decoration:none;
+  }
+  .call-btn svg{ width:18px; height:18px; }
+  .empty-state{
+    text-align:center;
+    color:var(--text-muted);
+    font-size:14px;
+    padding:40px 20px;
+  }
+
+  /* ---------- Notruf ---------- */
+  .notruf-wrap{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:24px 8px 8px;
+  }
+  .notruf-btn{
+    width:180px; height:180px;
+    border-radius:50%;
+    background:var(--danger);
+    color:var(--danger-contrast);
+    border:none;
+    font-family:var(--mono);
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:0.03em;
+    cursor:pointer;
+    box-shadow:0 0 0 8px rgba(193,67,46,0.14);
+  }
+  .notruf-btn:active{ transform:scale(0.97); }
+  .notruf-status{
+    margin-top:18px;
+    font-size:13px;
+    color:var(--text-muted);
+    text-align:center;
+    min-height:18px;
+  }
+  .notruf-settings{
+    margin-top:32px;
+    width:100%;
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px;
+  }
+  .notruf-settings h3{
+    margin:0 0 12px;
+    font-size:13px;
+    color:var(--text-muted);
+    font-weight:600;
+  }
+
+  /* ---------- Info (Strecken/Baureihen) ---------- */
+  .info-toggle{
+    display:flex;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .info-toggle button{
+    flex:1;
+    padding:9px;
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    color:var(--text-muted);
+    border-radius:8px;
+    font-size:13px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .info-toggle button.active{
+    background:var(--accent);
+    color:var(--accent-contrast);
+    border-color:var(--accent);
+  }
+  .info-card{ align-items:flex-start; cursor:pointer; }
+  .info-titel{ font-weight:600; font-size:15px; }
+  .info-detail{ color:var(--text-muted); font-size:13px; margin-top:2px; }
+  .info-body{
+    color:var(--text);
+    font-size:13.5px;
+    line-height:1.5;
+    margin-top:8px;
+    white-space:pre-wrap;
+  }
+
+  /* ---------- Verwaltung ---------- */
+  .verw-tabs{ display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+  .verw-tabs button{
+    padding:8px 12px;
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    color:var(--text-muted);
+    border-radius:8px;
+    font-size:12.5px;
+    cursor:pointer;
+  }
+  .verw-tabs button.active{ background:var(--accent); color:var(--accent-contrast); border-color:var(--accent); }
+  .verw-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:11px 12px;
+    margin-bottom:7px;
+  }
+  .verw-row .titel{ flex:1; font-size:14px; }
+  .verw-row .titel .sub{ display:block; color:var(--text-muted); font-size:12px; }
+  .icon-btn{
+    background:none;
+    border:none;
+    color:var(--text-muted);
+    cursor:pointer;
+    padding:4px;
+    display:flex;
+  }
+  .icon-btn svg{ width:17px; height:17px; }
+  .icon-btn.danger{ color:var(--danger); }
+  .add-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    width:100%;
+    padding:11px;
+    background:transparent;
+    border:1px dashed var(--border);
+    color:var(--text-muted);
+    border-radius:8px;
+    font-size:13.5px;
+    cursor:pointer;
+    margin-top:6px;
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,0.55);
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:50;
+  }
+  .modal{
+    width:100%;
+    max-width:480px;
+    background:var(--bg-elev);
+    border:1px solid var(--border);
+    border-radius:16px 16px 0 0;
+    padding:20px 18px calc(20px + env(safe-area-inset-bottom));
+    max-height:85vh;
+    overflow-y:auto;
+  }
+  .modal h3{ margin:0 0 16px; font-size:16px; }
+  .modal .field textarea{
+    width:100%;
+    padding:11px 12px;
+    background:var(--bg-elev-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    color:var(--text);
+    font-size:14px;
+    min-height:80px;
+    resize:vertical;
+    font-family:var(--sans);
+  }
+  .modal-actions{ display:flex; gap:10px; margin-top:6px; }
+  .modal-actions .btn{ width:auto; flex:1; }
+
+  @media (min-width: 620px){
+    main{ padding-top:24px; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===================== LOGIN ===================== -->
+  <div id="login-screen">
+    <div class="brand">
+      <span class="brand-mark">Tf</span>
+      <span class="brand-name">Tfix</span>
+    </div>
+    <div class="login-card">
+      <div class="field">
+        <label for="login-email">E-Mail</label>
+        <input id="login-email" type="email" autocomplete="username" placeholder="name@beispiel.de">
+      </div>
+      <div class="field">
+        <label for="login-pw">Passwort</label>
+        <input id="login-pw" type="password" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" id="login-btn">Anmelden</button>
+      <div class="login-error" id="login-error"></div>
+    </div>
+    <div class="login-hint">Zugang nur für freigegebene Nutzer. Konten werden von der Verwaltung angelegt.</div>
+  </div>
+
+  <!-- ===================== APP ===================== -->
+  <div id="app" class="hidden">
+    <header class="topbar">
+      <span class="brand-name">Tfix</span>
+      <div class="user-chip">
+        <span id="user-email"></span>
+        <button id="logout-btn">Abmelden</button>
+      </div>
+    </header>
+
+    <main>
+
+      <!-- Kontakte -->
+      <section class="view active" id="view-kontakte">
+        <h2 class="view-title">Kontakte</h2>
+        <input class="search" id="kontakte-search" placeholder="Name, Ort oder Rolle suchen …">
+        <div id="kontakte-liste"></div>
+      </section>
+
+      <!-- Notruf -->
+      <section class="view" id="view-notruf">
+        <h2 class="view-title">Notruf</h2>
+        <div class="notruf-wrap">
+          <button class="notruf-btn" id="notruf-btn">NOTRUF<br>SENDEN</button>
+          <div class="notruf-status" id="notruf-status">Sendet Standort per SMS an die hinterlegte Nummer.</div>
+
+          <div class="notruf-settings">
+            <h3>Zielnummer für Notruf-SMS</h3>
+            <div class="field">
+              <input id="notruf-nummer" placeholder="+49 …">
+            </div>
+            <button class="btn btn-ghost" id="notruf-nummer-speichern">Speichern</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Strecken / Baureihen -->
+      <section class="view" id="view-info">
+        <h2 class="view-title">Strecken &amp; Baureihen</h2>
+        <div class="info-toggle">
+          <button class="active" data-info="strecken">Strecken</button>
+          <button data-info="baureihen">Baureihen</button>
+        </div>
+        <input class="search" id="info-search" placeholder="Suchen …">
+        <div id="info-liste"></div>
+      </section>
+
+      <!-- Verwaltung -->
+      <section class="view" id="view-verwaltung">
+        <h2 class="view-title">Verwaltung</h2>
+        <div class="verw-tabs">
+          <button class="active" data-verw="kontakte">Kontakte</button>
+          <button data-verw="strecken">Strecken</button>
+          <button data-verw="baureihen">Baureihen</button>
+          <button data-verw="nutzer">Nutzer</button>
+        </div>
+        <div id="verwaltung-liste"></div>
+      </section>
+
+    </main>
+
+    <nav class="tabbar">
+      <button class="tab-btn active" data-view="kontakte">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Kontakte
+      </button>
+      <button class="tab-btn" data-view="notruf">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L14.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+        Notruf
+      </button>
+      <button class="tab-btn" data-view="info">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v16"/></svg>
+        Strecken
+      </button>
+      <button class="tab-btn hidden" id="tab-verwaltung" data-view="verwaltung">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+        Verwaltung
+      </button>
+    </nav>
+  </div>
+
+  <div id="modal-root"></div>
+
+  <!-- ===================== FIREBASE ===================== -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+
+  <script>
+  // -------------------------------------------------------------
+  // Initialisierung
+  // -------------------------------------------------------------
+  firebase.initializeApp(window.TFIX_FIREBASE_CONFIG);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+
+  let aktuellerNutzer = null;   // { uid, email, freigegeben, admin }
+  let unsubKontakte, unsubStrecken, unsubBaureihen;
+  let kontakteCache = [], streckenCache = [], baureihenCache = [];
+  let infoAktiv = 'strecken';
+  let verwAktiv = 'kontakte';
+
+  // -------------------------------------------------------------
+  // Login / Logout
+  // -------------------------------------------------------------
+  document.getElementById('login-btn').addEventListener('click', () => {
+    const email = document.getElementById('login-email').value.trim();
+    const pw = document.getElementById('login-pw').value;
+    const fehler = document.getElementById('login-error');
+    fehler.textContent = '';
+    if(!email || !pw){ fehler.textContent = 'Bitte E-Mail und Passwort eingeben.'; return; }
+    auth.signInWithEmailAndPassword(email, pw)
+      .catch(err => { fehler.textContent = 'Anmeldung fehlgeschlagen: ' + uebersetzeFehler(err); });
+  });
+
+  document.getElementById('logout-btn').addEventListener('click', () => auth.signOut());
+
+  function uebersetzeFehler(err){
+    if(err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') return 'E-Mail oder Passwort falsch.';
+    if(err.code === 'auth/user-not-found') return 'Kein Konto mit dieser E-Mail.';
+    if(err.code === 'auth/too-many-requests') return 'Zu viele Versuche, bitte später erneut probieren.';
+    return err.message;
+  }
+
+  auth.onAuthStateChanged(async (user) => {
+    if(unsubKontakte) unsubKontakte();
+    if(unsubStrecken) unsubStrecken();
+    if(unsubBaureihen) unsubBaureihen();
+
+    if(!user){
+      aktuellerNutzer = null;
+      document.getElementById('app').classList.add('hidden');
+      document.getElementById('login-screen').classList.remove('hidden');
+      return;
+    }
+
+    const doc = await db.collection('benutzer').doc(user.uid).get();
+    if(!doc.exists || !doc.data().freigegeben){
+      document.getElementById('login-error').textContent = 'Konto ist noch nicht freigegeben. Bitte an die Verwaltung wenden.';
+      auth.signOut();
+      return;
+    }
+
+    aktuellerNutzer = { uid: user.uid, email: user.email, freigegeben: true, admin: !!doc.data().admin };
+    document.getElementById('login-screen').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('user-email').textContent = user.email;
+    document.getElementById('tab-verwaltung').classList.remove('hidden');
+
+    ladeNotrufNummer();
+    starteDatenListener();
+  });
+
+  // -------------------------------------------------------------
+  // Tab-Navigation
+  // -------------------------------------------------------------
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + btn.dataset.view).classList.add('active');
+    });
+  });
+
+  // -------------------------------------------------------------
+  // Daten-Listener (live)
+  // -------------------------------------------------------------
+  function starteDatenListener(){
+    unsubKontakte = db.collection('kontakte').orderBy('name').onSnapshot(snap => {
+      kontakteCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderKontakte();
+      if(verwAktiv === 'kontakte') renderVerwaltung();
+    });
+    unsubStrecken = db.collection('strecken').orderBy('name').onSnapshot(snap => {
+      streckenCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderInfo();
+      if(verwAktiv === 'strecken') renderVerwaltung();
+    });
+    unsubBaureihen = db.collection('baureihen').orderBy('bezeichnung').onSnapshot(snap => {
+      baureihenCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderInfo();
+      if(verwAktiv === 'baureihen') renderVerwaltung();
+    });
+  }
+
+  // -------------------------------------------------------------
+  // Kontakte
+  // -------------------------------------------------------------
+  document.getElementById('kontakte-search').addEventListener('input', renderKontakte);
+
+  function renderKontakte(){
+    const q = document.getElementById('kontakte-search').value.trim().toLowerCase();
+    const liste = document.getElementById('kontakte-liste');
+    const gefiltert = kontakteCache.filter(k =>
+      !q || [k.name, k.rolle, k.ort, k.kategorie].filter(Boolean).join(' ').toLowerCase().includes(q)
+    );
+
+    if(gefiltert.length === 0){
+      liste.innerHTML = '<div class="empty-state">Keine Kontakte gefunden.</div>';
+      return;
+    }
+
+    const gruppen = {};
+    gefiltert.forEach(k => {
+      const key = k.kategorie || 'Sonstige';
+      (gruppen[key] ||= []).push(k);
+    });
+
+    liste.innerHTML = Object.keys(gruppen).sort().map(kat => `
+      <div class="kategorie-label">${escapeHtml(kat)}</div>
+      ${gruppen[kat].map(k => `
+        <div class="kontakt-card">
+          <div class="kontakt-info">
+            <div class="kontakt-name">${escapeHtml(k.name || '')}</div>
+            <div class="kontakt-rolle">${escapeHtml([k.rolle, k.ort].filter(Boolean).join(' · '))}</div>
+            <div class="kontakt-nummer">${escapeHtml(k.telefon || '')}</div>
+          </div>
+          ${k.telefon ? `
+            <a class="call-btn" href="tel:${encodeURIComponent(k.telefon)}" aria-label="Anrufen">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </a>` : ''}
+        </div>
+      `).join('')}
+    `).join('');
+  }
+
+  // -------------------------------------------------------------
+  // Notruf
+  // -------------------------------------------------------------
+  document.getElementById('notruf-btn').addEventListener('click', () => {
+    const status = document.getElementById('notruf-status');
+    if(!navigator.geolocation){
+      status.textContent = 'Standort auf diesem Gerät nicht verfügbar. SMS ohne Standort wird vorbereitet.';
+      sendeNotrufSms(null);
+      return;
+    }
+    status.textContent = 'Standort wird ermittelt …';
+    navigator.geolocation.getCurrentPosition(
+      pos => sendeNotrufSms(pos.coords),
+      () => { status.textContent = 'Standort nicht verfügbar. SMS ohne Standort wird vorbereitet.'; sendeNotrufSms(null); },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  });
+
+  function sendeNotrufSms(coords){
+    const status = document.getElementById('notruf-status');
+    const nummer = document.getElementById('notruf-nummer').value.trim();
+    if(!nummer){ status.textContent = 'Bitte zuerst eine Zielnummer hinterlegen.'; return; }
+    let text = 'Notruf Tfix';
+    if(coords){
+      text += ` – Standort: https://maps.google.com/?q=${coords.latitude},${coords.longitude}`;
+    }
+    status.textContent = coords ? 'Standort ermittelt. SMS wird geöffnet …' : 'SMS wird geöffnet …';
+    // sms:-Link funktioniert plattformabhängig mit ? oder &
+    const trenner = /iPad|iPhone|iPod/.test(navigator.userAgent) ? '&' : '?';
+    window.location.href = `sms:${encodeURIComponent(nummer)}${trenner}body=${encodeURIComponent(text)}`;
+  }
+
+  async function ladeNotrufNummer(){
+    const doc = await db.collection('einstellungen').doc(aktuellerNutzer.uid).get();
+    document.getElementById('notruf-nummer').value = doc.exists ? (doc.data().notrufNummer || '') : '';
+  }
+
+  document.getElementById('notruf-nummer-speichern').addEventListener('click', async () => {
+    const nummer = document.getElementById('notruf-nummer').value.trim();
+    await db.collection('einstellungen').doc(aktuellerNutzer.uid).set({ notrufNummer: nummer }, { merge: true });
+    document.getElementById('notruf-status').textContent = 'Nummer gespeichert.';
+  });
+
+  // -------------------------------------------------------------
+  // Strecken / Baureihen (Ansicht)
+  // -------------------------------------------------------------
+  document.querySelectorAll('.info-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.info-toggle button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      infoAktiv = btn.dataset.info;
+      renderInfo();
+    });
+  });
+  document.getElementById('info-search').addEventListener('input', renderInfo);
+
+  let offeneInfoId = null;
+
+  function renderInfo(){
+    const q = document.getElementById('info-search').value.trim().toLowerCase();
+    const liste = document.getElementById('info-liste');
+    const quelle = infoAktiv === 'strecken' ? streckenCache : baureihenCache;
+
+    const gefiltert = quelle.filter(e => {
+      const titel = infoAktiv === 'strecken' ? e.name : e.bezeichnung;
+      return !q || [titel, e.info].filter(Boolean).join(' ').toLowerCase().includes(q);
+    });
+
+    if(gefiltert.length === 0){
+      liste.innerHTML = `<div class="empty-state">Keine Einträge gefunden.</div>`;
+      return;
+    }
+
+    liste.innerHTML = gefiltert.map(e => {
+      const titel = infoAktiv === 'strecken' ? e.name : e.bezeichnung;
+      const detail = infoAktiv === 'strecken' ? e.kilometrierung : e.kategorie;
+      const offen = offeneInfoId === e.id;
+      return `
+        <div class="info-card" data-id="${e.id}">
+          <div style="flex:1;">
+            <div class="info-titel">${escapeHtml(titel || '')}</div>
+            ${detail ? `<div class="info-detail">${escapeHtml(detail)}</div>` : ''}
+            ${offen && e.info ? `<div class="info-body">${escapeHtml(e.info)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    liste.querySelectorAll('.info-card').forEach(card => {
+      card.addEventListener('click', () => {
+        offeneInfoId = offeneInfoId === card.dataset.id ? null : card.dataset.id;
+        renderInfo();
+      });
+    });
+  }
+
+  // -------------------------------------------------------------
+  // Verwaltung
+  // -------------------------------------------------------------
+  document.querySelectorAll('.verw-tabs button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.verw-tabs button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      verwAktiv = btn.dataset.verw;
+      renderVerwaltung();
+    });
+  });
+
+  let nutzerCache = [];
+  async function ladeNutzerCache(){
+    const snap = await db.collection('benutzer').get();
+    nutzerCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  }
+
+  async function renderVerwaltung(){
+    const liste = document.getElementById('verwaltung-liste');
+
+    if(verwAktiv === 'nutzer'){
+      if(!aktuellerNutzer.admin){
+        liste.innerHTML = '<div class="empty-state">Nur Admins können Nutzer verwalten.</div>';
+        return;
+      }
+      await ladeNutzerCache();
+      liste.innerHTML = nutzerCache.map(n => `
+        <div class="verw-row">
+          <div class="titel">${escapeHtml(n.email || n.id)}<span class="sub">${n.freigegeben ? 'freigegeben' : 'nicht freigegeben'}${n.admin ? ' · Admin' : ''}</span></div>
+          <button class="icon-btn" data-toggle-freigabe="${n.id}" title="Freigabe umschalten">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>
+          </button>
+        </div>
+      `).join('') + `<div class="empty-state" style="padding-top:8px;">Neue Konten werden in der Firebase-Konsole unter Authentication angelegt und erscheinen hier automatisch beim ersten Login zur Freigabe.</div>`;
+
+      liste.querySelectorAll('[data-toggle-freigabe]').forEach(b => {
+        b.addEventListener('click', async () => {
+          const id = b.dataset.toggleFreigabe;
+          const n = nutzerCache.find(x => x.id === id);
+          await db.collection('benutzer').doc(id).set({ freigegeben: !n.freigegeben }, { merge: true });
+          renderVerwaltung();
+        });
+      });
+      return;
+    }
+
+    const config = {
+      kontakte: { cache: kontakteCache, titel: e => e.name, sub: e => [e.rolle, e.telefon].filter(Boolean).join(' · '), collection: 'kontakte' },
+      strecken: { cache: streckenCache, titel: e => e.name, sub: e => e.kilometrierung, collection: 'strecken' },
+      baureihen: { cache: baureihenCache, titel: e => e.bezeichnung, sub: e => e.kategorie, collection: 'baureihen' },
+    }[verwAktiv];
+
+    liste.innerHTML = config.cache.map(e => `
+      <div class="verw-row">
+        <div class="titel">${escapeHtml(config.titel(e) || '')}<span class="sub">${escapeHtml(config.sub(e) || '')}</span></div>
+        <button class="icon-btn" data-edit="${e.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
+        <button class="icon-btn danger" data-delete="${e.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg></button>
+      </div>
+    `).join('') + `<button class="add-btn" id="verw-add">+ Neuer Eintrag</button>`;
+
+    liste.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => oeffneFormular(verwAktiv, config.cache.find(x => x.id === b.dataset.edit))));
+    liste.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => loescheEintrag(config.collection, b.dataset.delete)));
+    document.getElementById('verw-add').addEventListener('click', () => oeffneFormular(verwAktiv, null));
+  }
+
+  async function loescheEintrag(collection, id){
+    if(!confirm('Diesen Eintrag wirklich löschen?')) return;
+    await db.collection(collection).doc(id).delete();
+  }
+
+  // -------------------------------------------------------------
+  // Formular-Modal für Kontakte / Strecken / Baureihen
+  // -------------------------------------------------------------
+  const FORMULAR_FELDER = {
+    kontakte: [
+      { key: 'name', label: 'Name', typ: 'text' },
+      { key: 'rolle', label: 'Rolle (z. B. Fdl, Weichenwärter)', typ: 'text' },
+      { key: 'ort', label: 'Ort / Stellwerk', typ: 'text' },
+      { key: 'telefon', label: 'Telefonnummer / Kurzwahl', typ: 'text' },
+      { key: 'kategorie', label: 'Kategorie (Gruppierung in der Liste)', typ: 'text' },
+    ],
+    strecken: [
+      { key: 'name', label: 'Streckenname', typ: 'text' },
+      { key: 'kilometrierung', label: 'Kilometrierung / Kurzangabe', typ: 'text' },
+      { key: 'info', label: 'Besonderheiten', typ: 'textarea' },
+    ],
+    baureihen: [
+      { key: 'bezeichnung', label: 'Bezeichnung', typ: 'text' },
+      { key: 'kategorie', label: 'Kategorie', typ: 'text' },
+      { key: 'info', label: 'Besonderheiten', typ: 'textarea' },
+    ],
+  };
+
+  function oeffneFormular(typ, eintrag){
+    const felder = FORMULAR_FELDER[typ];
+    const root = document.getElementById('modal-root');
+    root.innerHTML = `
+      <div class="modal-overlay" id="modal-overlay">
+        <div class="modal">
+          <h3>${eintrag ? 'Eintrag bearbeiten' : 'Neuer Eintrag'}</h3>
+          ${felder.map(f => `
+            <div class="field">
+              <label>${escapeHtml(f.label)}</label>
+              ${f.typ === 'textarea'
+                ? `<textarea data-key="${f.key}">${escapeHtml(eintrag?.[f.key] || '')}</textarea>`
+                : `<input data-key="${f.key}" value="${escapeHtml(eintrag?.[f.key] || '')}">`}
+            </div>
+          `).join('')}
+          <div class="modal-actions">
+            <button class="btn btn-ghost" id="modal-abbrechen">Abbrechen</button>
+            <button class="btn btn-primary" id="modal-speichern">Speichern</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById('modal-overlay').addEventListener('click', e => { if(e.target.id === 'modal-overlay') root.innerHTML = ''; });
+    document.getElementById('modal-abbrechen').addEventListener('click', () => root.innerHTML = '');
+    document.getElementById('modal-speichern').addEventListener('click', async () => {
+      const daten = {};
+      felder.forEach(f => { daten[f.key] = root.querySelector(`[data-key="${f.key}"]`).value.trim(); });
+      const collection = typ;
+      if(eintrag){
+        await db.collection(collection).doc(eintrag.id).set(daten, { merge: true });
+      } else {
+        await db.collection(collection).add(daten);
+      }
+      root.innerHTML = '';
+    });
+  }
+
+  // -------------------------------------------------------------
+  // Hilfsfunktionen
+  // -------------------------------------------------------------
+  function escapeHtml(str){
+    return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  </script>
+</body>
+</html>
