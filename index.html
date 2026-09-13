@@ -164,7 +164,7 @@
       <button class="topbar-back hidden" id="back-btn" aria-label="Zurück">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
-      <span class="topbar-title" id="topbar-title">Tfix</span>
+      <span class="topbar-title" id="topbar-title">TfInfo</span>
       <div class="user-chip">
         <span id="user-email"></span>
         <button id="logout-btn">Abmelden</button>
@@ -240,10 +240,6 @@
 
       <section class="screen" id="screen-bf-abkuerzungen">
         <h2 class="view-title">Abk./Ril100</h2>
-        <input class="search" id="bf-abk-search" placeholder="Kürzel oder Bedeutung suchen …">
-        <div id="bf-abk-liste"></div>
-
-        <h2 class="view-title" style="margin-top:26px;">Betriebsstellen (Ril100)</h2>
         <div class="subtle" id="ril100-status" style="margin-bottom:10px;">Lade Betriebsstellendaten …</div>
         <input class="search" id="ril100-search" placeholder="Name oder Ril100-Kürzel (mind. 2 Zeichen)">
         <div id="ril100-liste"></div>
@@ -334,7 +330,6 @@
           <button data-verw="strecken">Strecken</button>
           <button data-verw="baureihen">Baureihen</button>
           <button data-verw="bahnhoefe">Bahnhöfe</button>
-          <button data-verw="abkuerzungen">Abk./Ril100</button>
           <button data-verw="pausenraeume">Pausenräume</button>
           <button data-verw="rabatte">Rabatte</button>
           <button data-verw="funktionen">Funktionen-Links</button>
@@ -359,13 +354,13 @@
   // -------------------------------------------------------------
   // Initialisierung
   // -------------------------------------------------------------
-  firebase.initializeApp(window.TFIX_FIREBASE_CONFIG);
+  firebase.initializeApp(window.TFINFO_FIREBASE_CONFIG);
   const auth = firebase.auth();
   const db = firebase.firestore();
 
   let aktuellerNutzer = null;
   const unsub = {};
-  const cache = { kontakte:[], strecken:[], baureihen:[], bahnhoefe:[], abkuerzungen:[], pausenraeume:[], rabatte:[], funktionen:[], legende:[] };
+  const cache = { kontakte:[], strecken:[], baureihen:[], bahnhoefe:[], pausenraeume:[], rabatte:[], funktionen:[], legende:[] };
   let verwAktiv = 'kontakte';
   let tbKategorieAktiv = null;
 
@@ -416,15 +411,15 @@
 
     ladeNotrufNummer();
     starteDatenListener();
-    navStack = [{ id:'home', titel:'Tfix' }];
-    zeigeScreen('home', 'Tfix');
+    navStack = [{ id:'home', titel:'TfInfo' }];
+    zeigeScreen('home', 'TfInfo');
     renderTelefonbuchKategorien();
   });
 
   // -------------------------------------------------------------
   // Navigation (Screen-Stack)
   // -------------------------------------------------------------
-  let navStack = [{ id:'home', titel:'Tfix' }];
+  let navStack = [{ id:'home', titel:'TfInfo' }];
 
   function zeigeScreen(id, titel){
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -470,7 +465,6 @@
     bind('strecken', 'name');
     bind('baureihen', 'bezeichnung');
     bind('bahnhoefe', 'name');
-    bind('abkuerzungen', 'kuerzel');
     bind('pausenraeume', 'name');
     bind('rabatte', 'titel');
     bind('funktionen', 'titel');
@@ -481,7 +475,6 @@
     renderTelefonbuch();
     renderEinfacheListe('bahnhoefe');
     renderEinfacheListe('rabatte');
-    renderAbkuerzungen();
     renderStrecken();
     renderBaureihen();
     renderPausenraeume();
@@ -615,33 +608,6 @@
         </div>
       </div>
     `).join('') + (ril100Daten.filter(e => e.n.toLowerCase().includes(q) || e.k.toLowerCase().includes(q)).length > 100 ? '<div class="subtle" style="text-align:center; padding:8px;">Weiter eingrenzen für mehr Treffer …</div>' : '');
-  }
-
-  // -------------------------------------------------------------
-  // Abkürzungen / Ril100
-  // -------------------------------------------------------------
-  document.getElementById('bf-abk-search').addEventListener('input', renderAbkuerzungen);
-  function renderAbkuerzungen(){
-    const q = document.getElementById('bf-abk-search').value.trim().toLowerCase();
-    const liste = document.getElementById('bf-abk-liste');
-    const gefiltert = cache.abkuerzungen.filter(a => !q || [a.kuerzel, a.bedeutung].filter(Boolean).join(' ').toLowerCase().includes(q));
-    if(gefiltert.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Einträge gefunden.</div>'; return; }
-    liste.innerHTML = gefiltert.map(a => {
-      const offen = offeneEintraege.abkuerzungen === a.id;
-      return `
-        <div class="info-card" data-id="${a.id}">
-          <div class="info-titel">${escapeHtml(a.kuerzel || '')}</div>
-          <div class="info-detail">${escapeHtml(a.bedeutung || '')}</div>
-          ${offen && a.quelle ? `<div class="info-body" style="background:#1B2340; margin:8px -14px -13px; padding:10px 14px; border-radius:0 0 var(--radius) var(--radius);">Quellenangabe:\n${escapeHtml(a.quelle)}</div>` : ''}
-        </div>
-      `;
-    }).join('');
-    liste.querySelectorAll('.info-card').forEach(card => {
-      card.addEventListener('click', () => {
-        offeneEintraege.abkuerzungen = offeneEintraege.abkuerzungen === card.dataset.id ? null : card.dataset.id;
-        renderAbkuerzungen();
-      });
-    });
   }
 
   // -------------------------------------------------------------
@@ -785,7 +751,7 @@
     const status = document.getElementById('notruf-status');
     const nummer = document.getElementById('notruf-nummer').value.trim();
     if(!nummer){ status.textContent = 'Bitte zuerst eine Zielnummer hinterlegen.'; return; }
-    let text = 'Notruf Tfix';
+    let text = 'Notruf TfInfo';
     if(coords) text += ` – Standort: https://maps.google.com/?q=${coords.latitude},${coords.longitude}`;
     status.textContent = coords ? 'Standort ermittelt. SMS wird geöffnet …' : 'SMS wird geöffnet …';
     const trenner = /iPad|iPhone|iPod/.test(navigator.userAgent) ? '&' : '?';
@@ -825,7 +791,6 @@
     strecken: { titel:e=>e.name, sub:e=>e.kilometrierung },
     baureihen: { titel:e=>e.bezeichnung, sub:e=>e.kategorie },
     bahnhoefe: { titel:e=>e.name, sub:e=>e.ril100 },
-    abkuerzungen: { titel:e=>e.kuerzel, sub:e=>e.bedeutung },
     pausenraeume: { titel:e=>e.name, sub:e=>[e.ril100, e.ort].filter(Boolean).join(' · ') },
     rabatte: { titel:e=>e.titel, sub:()=>'' },
     funktionen: { titel:e=>e.titel, sub:e=>e.url },
@@ -907,11 +872,6 @@
       { key:'name', label:'Bahnhofsname', typ:'text' },
       { key:'ril100', label:'Ril100-Kürzel', typ:'text' },
       { key:'info', label:'Hinweise', typ:'textarea' },
-    ],
-    abkuerzungen: [
-      { key:'kuerzel', label:'Kürzel', typ:'text' },
-      { key:'bedeutung', label:'Bedeutung', typ:'text' },
-      { key:'quelle', label:'Quellenangabe (optional, z. B. Anhang 418.0300A02)', typ:'text' },
     ],
     pausenraeume: [
       { key:'name', label:'Bahnhofsname', typ:'text' },

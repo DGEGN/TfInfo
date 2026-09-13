@@ -47,11 +47,6 @@ service cloud.firestore {
       allow write: if istBearbeiter();
     }
 
-    match /abkuerzungen/{id} {
-      allow read: if istBearbeiter();
-      allow write: if istBearbeiter();
-    }
-
     match /pausenraeume/{id} {
       allow read: if istBearbeiter();
       allow write: if istBearbeiter();

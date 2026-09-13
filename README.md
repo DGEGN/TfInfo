@@ -1,8 +1,8 @@
-# Tfix-Nachbau
+# TfInfo-Nachbau
 
 Info-App für einen kleinen Kreis von Tf, nachgebaut nach dem Startmenü des Originals:
 Telefonbuch (mit Ril100-Suche und Kategorien), Bf/Strecke (Meine Bahnhöfe, Rabatte,
-Abk./Ril100 mit optionaler Quellenangabe, Pausenräume mit Name/Ril100-Suche, Bahnhofspläne
+Abk./Ril100 (offizielle Betriebsstellenliste), Pausenräume mit Name/Ril100-Suche, Bahnhofspläne
 mit Plan-Suche, Streckenbücher), Technik (Baureihen), Funktionen (Link-Liste zu
 hilfreichen Seiten), DB Fernverkehr (Legende Dienstauftrag) und SOS (Notruf mit
 Standort-SMS) sind bereits eingerichtet. Regelwerke, Zugfahrt, Weg/Zeit und Befehle sind
@@ -20,7 +20,7 @@ aus dem Regelwerk rein, nicht als Nachbau aus Vermutung. Der Menüpunkt ist als 
 angelegt, falls ihr die offizielle Grundlage später ergänzen wollt.
 
 **Wichtig, falls du die Regeln schon einmal deployt hattest:** die aktualisierte
-`firestore.rules` (mit den Collections `bahnhoefe`, `abkuerzungen`, `pausenraeume`,
+`firestore.rules` (mit den Collections `bahnhoefe`, `pausenraeume`,
 `rabatte`, `funktionen`, `legende`) muss erneut in der Firebase-Konsole eingefügt/
 veröffentlicht werden, sonst funktionieren diese Bereiche nicht.
 
@@ -74,9 +74,8 @@ enthalten – die trägt ihr selbst ein.
 2. Repo-Einstellungen → Pages → Branch auswählen, auf dem `index.html` liegt.
 3. Die von GitHub ausgegebene URL ist danach die App-Adresse für dich und deine Kollegen.
 
-**Ril100-Betriebsstellenliste:** unter Bf/Strecke → Abk./Ril100 gibt es jetzt zusätzlich
-eine durchsuchbare Liste aller ca. 25.400 offiziellen DB-Betriebsstellen (Name + Ril100-
-Kürzel + Kategorie), Stand 31.08.2026, aus der von euch bereitgestellten offiziellen
+**Ril100-Betriebsstellenliste:** unter Bf/Strecke → Abk./Ril100 gibt es eine durchsuchbare
+Liste aller ca. 25.400 offiziellen DB-Betriebsstellen (Name + Ril100-Kürzel + Kategorie), Stand 31.08.2026, aus der von euch bereitgestellten offiziellen
 DB-Tabelle. Diese Daten liegen als eigene Datei `ril100-betriebsstellen.json` neben
 `index.html` und werden beim Öffnen des Bereichs einmalig geladen (kein Firestore, keine
 Schreibvorgänge nötig – bei 25.000+ Einträgen wäre das sonst unnötig viel Datenverkehr
