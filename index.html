@@ -831,7 +831,14 @@
 
   async function loescheEintrag(collection, id){
     if(!confirm('Diesen Eintrag wirklich löschen?')) return;
-    await db.collection(collection).doc(id).delete();
+    try{
+      await db.collection(collection).doc(id).delete();
+    } catch(err){
+      console.error('Löschen fehlgeschlagen:', err);
+      alert(err.code === 'permission-denied'
+        ? 'Keine Berechtigung zum Löschen. Prüfe Freigabe und firestore.rules.'
+        : 'Fehler beim Löschen: ' + err.message);
+    }
   }
 
   // -------------------------------------------------------------
@@ -905,17 +912,34 @@
             <button class="btn btn-ghost" id="modal-abbrechen">Abbrechen</button>
             <button class="btn btn-primary" id="modal-speichern">Speichern</button>
           </div>
+          <div class="login-error" id="modal-fehler"></div>
         </div>
       </div>
     `;
     document.getElementById('modal-overlay').addEventListener('click', e => { if(e.target.id === 'modal-overlay') root.innerHTML = ''; });
     document.getElementById('modal-abbrechen').addEventListener('click', () => root.innerHTML = '');
     document.getElementById('modal-speichern').addEventListener('click', async () => {
+      const speichernBtn = document.getElementById('modal-speichern');
+      const fehlerEl = document.getElementById('modal-fehler');
+      fehlerEl.textContent = '';
+      speichernBtn.disabled = true;
+      speichernBtn.textContent = 'Speichert …';
       const daten = {};
       felder.forEach(f => { daten[f.key] = root.querySelector(`[data-key="${f.key}"]`).value.trim(); });
-      if(eintrag){ await db.collection(typ).doc(eintrag.id).set(daten, { merge:true }); }
-      else { await db.collection(typ).add(daten); }
-      root.innerHTML = '';
+      try{
+        if(eintrag){ await db.collection(typ).doc(eintrag.id).set(daten, { merge:true }); }
+        else { await db.collection(typ).add(daten); }
+        root.innerHTML = '';
+      } catch(err){
+        console.error('Speichern fehlgeschlagen:', err);
+        speichernBtn.disabled = false;
+        speichernBtn.textContent = 'Speichern';
+        if(err.code === 'permission-denied'){
+          fehlerEl.textContent = 'Keine Berechtigung zum Speichern. Prüfe, ob dein Konto freigegeben ist und ob die aktuelle firestore.rules-Datei in der Firebase-Konsole veröffentlicht wurde (Collection "' + typ + '").';
+        } else {
+          fehlerEl.textContent = 'Fehler beim Speichern: ' + err.message;
+        }
+      }
     });
   }
 
