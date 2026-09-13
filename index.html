@@ -242,6 +242,11 @@
         <h2 class="view-title">Abk./Ril100</h2>
         <input class="search" id="bf-abk-search" placeholder="Kürzel oder Bedeutung suchen …">
         <div id="bf-abk-liste"></div>
+
+        <h2 class="view-title" style="margin-top:26px;">Betriebsstellen (Ril100)</h2>
+        <div class="subtle" id="ril100-status" style="margin-bottom:10px;">Lade Betriebsstellendaten …</div>
+        <input class="search" id="ril100-search" placeholder="Name oder Ril100-Kürzel (mind. 2 Zeichen)">
+        <div id="ril100-liste"></div>
       </section>
 
       <section class="screen" id="screen-bf-pausenraeume">
@@ -448,6 +453,7 @@
 
   function ladeDatenFuerScreen(id){
     if(id === 'verwaltung') renderVerwaltung();
+    if(id === 'bf-abkuerzungen') ladeRil100Daten();
   }
 
   // -------------------------------------------------------------
@@ -574,6 +580,41 @@
         renderEinfacheListe(key);
       });
     });
+  }
+
+  // -------------------------------------------------------------
+  // Ril100-Betriebsstellen (statische Datei, offizielle DB-Liste)
+  // -------------------------------------------------------------
+  let ril100Daten = [];
+  let ril100Geladen = false;
+
+  async function ladeRil100Daten(){
+    if(ril100Geladen) return;
+    try{
+      const res = await fetch('ril100-betriebsstellen.json');
+      ril100Daten = await res.json();
+      ril100Geladen = true;
+      document.getElementById('ril100-status').textContent = ril100Daten.length.toLocaleString('de-DE') + ' Betriebsstellen geladen (Quelle: offizielle DB Ril100-Liste).';
+    } catch(err){
+      document.getElementById('ril100-status').textContent = 'Betriebsstellendaten konnten nicht geladen werden (ril100-betriebsstellen.json fehlt oder nicht erreichbar).';
+    }
+  }
+
+  document.getElementById('ril100-search').addEventListener('input', renderRil100);
+  function renderRil100(){
+    const q = document.getElementById('ril100-search').value.trim().toLowerCase();
+    const liste = document.getElementById('ril100-liste');
+    if(q.length < 2){ liste.innerHTML = ''; return; }
+    const treffer = ril100Daten.filter(e => e.n.toLowerCase().includes(q) || e.k.toLowerCase().includes(q)).slice(0, 100);
+    if(treffer.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Betriebsstelle gefunden.</div>'; return; }
+    liste.innerHTML = treffer.map(e => `
+      <div class="kontakt-card">
+        <div class="kontakt-info">
+          <div class="kontakt-name">${escapeHtml(e.n)} <span class="subtle">(${escapeHtml(e.k)})</span></div>
+          ${e.kat ? `<div class="kontakt-rolle">${escapeHtml(e.kat)}</div>` : ''}
+        </div>
+      </div>
+    `).join('') + (ril100Daten.filter(e => e.n.toLowerCase().includes(q) || e.k.toLowerCase().includes(q)).length > 100 ? '<div class="subtle" style="text-align:center; padding:8px;">Weiter eingrenzen für mehr Treffer …</div>' : '');
   }
 
   // -------------------------------------------------------------

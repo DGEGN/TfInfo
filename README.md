@@ -74,6 +74,17 @@ enthalten – die trägt ihr selbst ein.
 2. Repo-Einstellungen → Pages → Branch auswählen, auf dem `index.html` liegt.
 3. Die von GitHub ausgegebene URL ist danach die App-Adresse für dich und deine Kollegen.
 
+**Ril100-Betriebsstellenliste:** unter Bf/Strecke → Abk./Ril100 gibt es jetzt zusätzlich
+eine durchsuchbare Liste aller ca. 25.400 offiziellen DB-Betriebsstellen (Name + Ril100-
+Kürzel + Kategorie), Stand 31.08.2026, aus der von euch bereitgestellten offiziellen
+DB-Tabelle. Diese Daten liegen als eigene Datei `ril100-betriebsstellen.json` neben
+`index.html` und werden beim Öffnen des Bereichs einmalig geladen (kein Firestore, keine
+Schreibvorgänge nötig – bei 25.000+ Einträgen wäre das sonst unnötig viel Datenverkehr
+und ginge an die Firestore-Kontingente). **Wichtig:** die Datei muss mit hochgeladen
+werden und im selben Ordner wie `index.html` liegen, sonst bleibt die Betriebsstellen-Suche leer.
+Zum Aktualisieren künftig einfach eine neuere Version der offiziellen DB-Tabelle
+hochladen und neu einarbeiten lassen.
+
 ## Hinweis zum "exposed secret"-Alert für den Google API Key
 
 GitHub meldet den Firebase-`apiKey` standardmäßig als Secret, weil es generisch alle
