@@ -1,6 +1,6 @@
 // Trage hier die Konfigurationswerte aus deinem Firebase-Projekt ein.
 // Firebase-Konsole → Projekteinstellungen → "Meine Apps" → Web-App → Konfiguration
-window.TFIX_FIREBASE_CONFIG = {
+window.TFINFO_FIREBASE_CONFIG = {
   apiKey: "AIzaSyAdI3bJr71jVZ_3aenJVl6dbS6dqsMLGEs",
   authDomain: "tfinfo-edc5e.firebaseapp.com",
   projectId: "tfinfo-edc5e",
