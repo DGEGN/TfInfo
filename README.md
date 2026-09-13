@@ -74,6 +74,14 @@ enthalten – die trägt ihr selbst ein.
 2. Repo-Einstellungen → Pages → Branch auswählen, auf dem `index.html` liegt.
 3. Die von GitHub ausgegebene URL ist danach die App-Adresse für dich und deine Kollegen.
 
+**EVU-Einstellung (im Browser gespeichert):** über den neuen Menüpunkt "Einstellungen" im
+Startmenü lässt sich das EVU wählen (DB Fernverkehr / DB Cargo / DB Regio). Das ändert
+Bezeichnung und Unterpunkte der ersten Startmenü-Kachel. Für DB Fernverkehr sind
+Bremsberechnung-Hinweis und Legende Dienstauftrag hinterlegt; für DB Cargo und DB Regio
+ist die Kachel vorbereitet, aber noch ohne Unterpunkte – sag Bescheid, was dort rein soll,
+dann ergänze ich es. Die Auswahl wird nur lokal im Browser gespeichert (`localStorage`),
+nicht in Firestore – jedes Gerät/jeder Nutzer stellt sein EVU also selbst ein.
+
 **Ril100-Betriebsstellenliste:** unter Bf/Strecke → Abk./Ril100 gibt es eine durchsuchbare
 Liste aller ca. 25.400 offiziellen DB-Betriebsstellen (Name + Ril100-Kürzel + Kategorie), Stand 31.08.2026, aus der von euch bereitgestellten offiziellen
 DB-Tabelle. Diese Daten liegen als eigene Datei `ril100-betriebsstellen.json` neben

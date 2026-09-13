@@ -176,7 +176,7 @@
       <!-- ===== Startmenü ===== -->
       <section class="screen active" id="screen-home">
         <div class="tile-grid">
-          <div class="tile" data-nav="fernverkehr" data-titel="Fernverkehr">DB Fernverkehr</div>
+          <div class="tile" id="evu-tile" data-nav="fernverkehr" data-titel="DB Fernverkehr">DB Fernverkehr</div>
           <div class="tile" data-nav="bfstrecke" data-titel="Bf/Strecke">Bf/Strecke</div>
           <div class="tile" data-nav="platzhalter" data-titel="Regelwerke">Regelwerke</div>
           <div class="tile" data-nav="telefonbuch" data-titel="Telefonbuch">Telefonbuch</div>
@@ -188,11 +188,22 @@
           <div class="tile" data-nav="platzhalter" data-titel="Befehle">Befehle</div>
         </div>
         <div class="menu-list" style="margin-top:14px;">
+          <div class="menu-row" data-nav="einstellungen" data-titel="Einstellungen">
+            Einstellungen
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
           <div class="menu-row" data-nav="verwaltung" data-titel="Verwaltung">
             Verwaltung
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
           </div>
         </div>
+      </section>
+
+      <!-- ===== Einstellungen ===== -->
+      <section class="screen" id="screen-einstellungen">
+        <h2 class="view-title">Einstellungen</h2>
+        <div class="subtle" style="margin-bottom:14px;">EVU auswählen – bestimmt Bezeichnung und Unterpunkte der Fernverkehr/Cargo/Regio-Kachel im Startmenü. Wird nur auf diesem Gerät gespeichert.</div>
+        <div class="kat-grid" id="evu-auswahl"></div>
       </section>
 
       <!-- ===== Platzhalter (für noch nicht eingerichtete Bereiche) ===== -->
@@ -273,13 +284,10 @@
         <div id="strecken-liste"></div>
       </section>
 
-      <!-- ===== DB Fernverkehr Untermenü ===== -->
+      <!-- ===== EVU-Untermenü (DB Fernverkehr / DB Cargo / DB Regio) ===== -->
       <section class="screen" id="screen-fernverkehr">
-        <h2 class="view-title">DB Fernverkehr</h2>
-        <div class="menu-list">
-          <div class="menu-row" data-nav="fv-bremsberechnung" data-titel="Bremsberechnung ICE">Bremsberechnung ICE <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
-          <div class="menu-row" data-nav="fv-legende" data-titel="Legende Dienstauftrag">Legende Dienstauftrag <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></div>
-        </div>
+        <h2 class="view-title" id="fernverkehr-titel">DB Fernverkehr</h2>
+        <div class="menu-list" id="fernverkehr-untermenu"></div>
       </section>
 
       <section class="screen" id="screen-fv-bremsberechnung">
@@ -367,6 +375,62 @@
   const TELEFON_KATEGORIEN = ['Festnetz','Mobilnetz','Basa-Nummern','Langwahl','Ortsfunk/Kurzwahl'];
 
   // -------------------------------------------------------------
+  // EVU-Einstellung (im Browser gespeichert, nicht in Firestore)
+  // -------------------------------------------------------------
+  const EVU_OPTIONEN = ['DB Fernverkehr', 'DB Cargo', 'DB Regio'];
+  const EVU_UNTERMENUES = {
+    'DB Fernverkehr': [
+      { id:'fv-bremsberechnung', titel:'Bremsberechnung ICE' },
+      { id:'fv-legende', titel:'Legende Dienstauftrag' },
+    ],
+    'DB Cargo': [],
+    'DB Regio': [],
+  };
+
+  function ladeEvu(){
+    return localStorage.getItem('tfinfo-evu') || 'DB Fernverkehr';
+  }
+
+  function setzeEvu(wert){
+    localStorage.setItem('tfinfo-evu', wert);
+    aktualisiereEvuTile();
+    renderEvuAuswahl();
+    renderFernverkehrUntermenue();
+  }
+
+  function aktualisiereEvuTile(){
+    const evu = ladeEvu();
+    const tile = document.getElementById('evu-tile');
+    tile.textContent = evu;
+    tile.dataset.titel = evu;
+  }
+
+  function renderEvuAuswahl(){
+    const aktuelle = ladeEvu();
+    const wrap = document.getElementById('evu-auswahl');
+    wrap.innerHTML = EVU_OPTIONEN.map(o => `<div class="kat-btn ${o === aktuelle ? 'active' : ''}" data-evu="${escapeHtml(o)}">${escapeHtml(o)}</div>`).join('');
+    wrap.querySelectorAll('.kat-btn').forEach(btn => {
+      btn.addEventListener('click', () => setzeEvu(btn.dataset.evu));
+    });
+  }
+
+  function renderFernverkehrUntermenue(){
+    const aktuelle = ladeEvu();
+    document.getElementById('fernverkehr-titel').textContent = aktuelle;
+    const wrap = document.getElementById('fernverkehr-untermenu');
+    const items = EVU_UNTERMENUES[aktuelle] || [];
+    if(items.length === 0){
+      wrap.innerHTML = `<div class="empty-state">Für ${escapeHtml(aktuelle)} sind noch keine Unterpunkte eingerichtet.</div>`;
+      return;
+    }
+    wrap.innerHTML = items.map(i => `
+      <div class="menu-row" data-nav="${i.id}" data-titel="${escapeHtml(i.titel)}">${escapeHtml(i.titel)}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </div>
+    `).join('');
+  }
+
+  // -------------------------------------------------------------
   // Login / Logout
   // -------------------------------------------------------------
   document.getElementById('login-btn').addEventListener('click', () => {
@@ -414,6 +478,9 @@
     navStack = [{ id:'home', titel:'TfInfo' }];
     zeigeScreen('home', 'TfInfo');
     renderTelefonbuchKategorien();
+    aktualisiereEvuTile();
+    renderEvuAuswahl();
+    renderFernverkehrUntermenue();
   });
 
   // -------------------------------------------------------------
