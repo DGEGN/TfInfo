@@ -74,6 +74,16 @@ enthalten – die trägt ihr selbst ein.
 2. Repo-Einstellungen → Pages → Branch auswählen, auf dem `index.html` liegt.
 3. Die von GitHub ausgegebene URL ist danach die App-Adresse für dich und deine Kollegen.
 
+**Pausenräume-Datenimport:** aus der offiziellen DB-Liste "Pausenräume im DB Konzern,
+Stand 01.02.2024" wurden 789 Einträge aufbereitet (Name, Ril100, Gesellschaft, Details zu
+Lage/Adresse/Öffnungszeiten/Zugang). Diese liegen in `pausenraeume-import.json` neben
+`index.html` (muss mit hochgeladen werden). Unter Verwaltung → Pausenräume gibt es einen
+Button **"Pausenräume aus Datei importieren (einmalig)"**, der alle Einträge in Firestore
+schreibt – danach ganz normal über die App bearbeitbar/löschbar wie jeder andere Eintrag.
+**Wichtig:** der Button einmal klicken und abwarten, bis "Fertig" erscheint (dauert wegen
+der Menge kurz). Nochmaliges Klicken erzeugt Duplikate, da es immer neue Einträge anlegt,
+keinen Abgleich mit vorhandenen macht.
+
 **EVU-Einstellung (im Browser gespeichert):** über den neuen Menüpunkt "Einstellungen" im
 Startmenü lässt sich das EVU wählen (DB Fernverkehr / DB Cargo / DB Regio). Das ändert
 Bezeichnung und Unterpunkte der ersten Startmenü-Kachel. Für DB Fernverkehr sind

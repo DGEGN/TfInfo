@@ -732,15 +732,25 @@
       const rilTreffer = !qRil || (e.ril100 || '').toLowerCase().includes(qRil);
       return nameTreffer && rilTreffer;
     });
+    if(!qName && !qRil){ liste.innerHTML = `<div class="empty-state">${cache.pausenraeume.length.toLocaleString('de-DE')} Pausenräume verfügbar. Namen oder Ril100 eingeben, um zu suchen.</div>`; return; }
     if(treffer.length === 0){ liste.innerHTML = '<div class="empty-state">Keine Pausenräume gefunden.</div>'; return; }
-    liste.innerHTML = treffer.map(e => `
-      <div class="kontakt-card">
-        <div class="kontakt-info">
-          <div class="kontakt-name">${escapeHtml(e.name || '')}${e.ril100 ? ` <span class="subtle">(${escapeHtml(e.ril100)})</span>` : ''}</div>
-          <div class="kontakt-rolle">${escapeHtml(e.ort || '')}</div>
+    const begrenzt = treffer.slice(0, 100);
+    liste.innerHTML = begrenzt.map(e => {
+      const offen = offeneEintraege.pausenraeume === e.id;
+      return `
+        <div class="info-card" data-id="${e.id}">
+          <div class="info-titel">${escapeHtml(e.name || '')}${e.ril100 ? ` <span class="subtle">(${escapeHtml(e.ril100)})</span>` : ''}</div>
+          ${e.gesellschaft ? `<div class="info-detail">${escapeHtml(e.gesellschaft)}</div>` : ''}
+          ${offen && e.ort ? `<div class="info-body">${escapeHtml(e.ort)}</div>` : ''}
         </div>
-      </div>
-    `).join('');
+      `;
+    }).join('') + (treffer.length > 100 ? '<div class="subtle" style="text-align:center; padding:8px;">Weiter eingrenzen für mehr Treffer …</div>' : '');
+    liste.querySelectorAll('.info-card').forEach(card => {
+      card.addEventListener('click', () => {
+        offeneEintraege.pausenraeume = offeneEintraege.pausenraeume === card.dataset.id ? null : card.dataset.id;
+        renderPausenraeume();
+      });
+    });
   }
 
   // -------------------------------------------------------------
@@ -858,7 +868,7 @@
     strecken: { titel:e=>e.name, sub:e=>e.kilometrierung },
     baureihen: { titel:e=>e.bezeichnung, sub:e=>e.kategorie },
     bahnhoefe: { titel:e=>e.name, sub:e=>e.ril100 },
-    pausenraeume: { titel:e=>e.name, sub:e=>[e.ril100, e.ort].filter(Boolean).join(' · ') },
+    pausenraeume: { titel:e=>e.name, sub:e=>[e.ril100, e.gesellschaft].filter(Boolean).join(' · ') },
     rabatte: { titel:e=>e.titel, sub:()=>'' },
     funktionen: { titel:e=>e.titel, sub:e=>e.url },
     legende: { titel:e=>e.begriff, sub:e=>e.bedeutung },
@@ -889,7 +899,10 @@
 
     const cfg = VERW_CONFIG[verwAktiv];
     const daten = cache[verwAktiv] || [];
-    liste.innerHTML = daten.map(e => `
+    const importZeile = verwAktiv === 'pausenraeume'
+      ? `<div class="verw-row" style="justify-content:center;"><button class="btn btn-ghost" id="pausen-import-btn" style="width:auto; padding:8px 14px;">Pausenräume aus Datei importieren (einmalig)</button></div><div class="subtle" id="pausen-import-status" style="text-align:center; margin-bottom:8px;"></div>`
+      : '';
+    liste.innerHTML = importZeile + daten.map(e => `
       <div class="verw-row">
         <div class="titel">${escapeHtml(cfg.titel(e) || '')}<span class="sub">${escapeHtml(cfg.sub(e) || '')}</span></div>
         <button class="icon-btn" data-edit="${e.id}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></button>
@@ -900,6 +913,36 @@
     liste.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => oeffneFormular(verwAktiv, daten.find(x => x.id === b.dataset.edit))));
     liste.querySelectorAll('[data-delete]').forEach(b => b.addEventListener('click', () => loescheEintrag(verwAktiv, b.dataset.delete)));
     document.getElementById('verw-add').addEventListener('click', () => oeffneFormular(verwAktiv, null));
+    if(verwAktiv === 'pausenraeume'){
+      document.getElementById('pausen-import-btn').addEventListener('click', importPausenraeume);
+    }
+  }
+
+  async function importPausenraeume(){
+    const status = document.getElementById('pausen-import-status');
+    if(!confirm('Achtung: Das fügt alle Einträge aus pausenraeume-import.json als NEUE Datensätze hinzu (auch wenn schon importiert wurde – das würde Duplikate erzeugen). Fortfahren?')) return;
+    status.textContent = 'Lade Datei …';
+    try{
+      const res = await fetch('pausenraeume-import.json');
+      const eintraege = await res.json();
+      status.textContent = `0 / ${eintraege.length} importiert …`;
+      let geschafft = 0;
+      for(let i = 0; i < eintraege.length; i += 450){
+        const stapel = eintraege.slice(i, i + 450);
+        const batch = db.batch();
+        stapel.forEach(e => {
+          const ref = db.collection('pausenraeume').doc();
+          batch.set(ref, { name: e.name || '', ril100: e.ril100 || '', gesellschaft: e.gesellschaft || '', ort: e.ort || '' });
+        });
+        await batch.commit();
+        geschafft += stapel.length;
+        status.textContent = `${geschafft} / ${eintraege.length} importiert …`;
+      }
+      status.textContent = `Fertig: ${geschafft} Pausenräume importiert.`;
+    } catch(err){
+      console.error('Import fehlgeschlagen:', err);
+      status.textContent = 'Import fehlgeschlagen: ' + err.message;
+    }
   }
 
   async function loescheEintrag(collection, id){
@@ -943,7 +986,8 @@
     pausenraeume: [
       { key:'name', label:'Bahnhofsname', typ:'text' },
       { key:'ril100', label:'Ril100-Kürzel (optional)', typ:'text' },
-      { key:'ort', label:'Lagebeschreibung (z. B. "Gleis 1, 1.OG im ServiceCenter")', typ:'text' },
+      { key:'gesellschaft', label:'Gesellschaft (z. B. DB Regio AG, DB Cargo AG)', typ:'text' },
+      { key:'ort', label:'Details (Lage, Adresse, Öffnungszeiten, Zugang)', typ:'textarea' },
     ],
     rabatte: [
       { key:'titel', label:'Titel', typ:'text' },
