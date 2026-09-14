@@ -66,6 +66,15 @@ Kontakte, Strecken und Baureihen werden direkt in der App unter "Verwaltung" gep
 (nur für freigegebene Nutzer sichtbar/bearbeitbar). Es sind absichtlich keine Beispieldaten
 enthalten – die trägt ihr selbst ein.
 
+**Kontakte mit mehreren Nummerntypen:** ein Kontakt kann jetzt gleichzeitig Festnetz,
+Mobilnetz, Basa-Nummer, Langwahl und Ortsfunk/Kurzwahl haben – einfach die passenden
+Felder im Formular ausfüllen, leere Felder werden ignoriert. Im Telefonbuch taucht der
+Kontakt dann automatisch in jeder Kategorie auf, für die er eine Nummer hat.
+**Falls ihr schon Kontakte im alten Format (eine Kategorie + eine Nummer) angelegt hattet:**
+unter Verwaltung → Kontakte gibt es einmalig den Button **"Alte Kontakte migrieren"**, der
+diese automatisch ins neue Format überträgt. Einmal reicht – danach sind alle Kontakte auf
+dem neuen Stand.
+
 ## 4. Deployment (GitHub Pages)
 
 1. Dieses Verzeichnis in ein GitHub-Repo pushen (privates Repo empfohlen, da die
@@ -83,6 +92,21 @@ schreibt – danach ganz normal über die App bearbeitbar/löschbar wie jeder an
 **Wichtig:** der Button einmal klicken und abwarten, bis "Fertig" erscheint (dauert wegen
 der Menge kurz). Nochmaliges Klicken erzeugt Duplikate, da es immer neue Einträge anlegt,
 keinen Abgleich mit vorhandenen macht.
+
+**Google-Maps-Links bei Pausenräumen:** jeder Eintrag hat jetzt ein Feld für einen
+Google-Maps-Link. In `pausenraeume-import.json` ist er automatisch aus Adresse (bzw.
+Bahnhofsname als Fallback ohne Adresse) generiert. Beim Aufklappen eines Eintrags
+erscheint ein "In Google Maps öffnen"-Button. Über Verwaltung lässt sich der Link bei
+jedem Eintrag auch von Hand setzen oder korrigieren.
+
+**Rabatte-Datenimport:** aus der offiziellen DB-Reisemarkt-Liste "Rabatte im Bahnhof"
+wurden 216 Einträge an 76 Bahnhöfen aufbereitet (Bahnhof, Geschäft, Mitarbeiter-Rabatt,
+Legitimation, Standort im Bahnhof). Diese liegen in `rabatte-import.json` neben
+`index.html` (muss mit hochgeladen werden). Unter Verwaltung → Rabatte gibt es genau wie
+bei den Pausenräumen einen Button **"Rabatte aus Datei importieren (einmalig)"** – einmal
+klicken, abwarten bis "Fertig" erscheint, danach ganz normal über die App bearbeitbar.
+Auch hier gilt: nochmaliges Klicken erzeugt Duplikate. Die Anzeige unter Bf/Strecke →
+Rabatte ist jetzt nach Bahnhof gruppiert und durchsuchbar (nach Bahnhof oder Geschäft).
 
 **EVU-Einstellung (im Browser gespeichert):** über den neuen Menüpunkt "Einstellungen" im
 Startmenü lässt sich das EVU wählen (DB Fernverkehr / DB Cargo / DB Regio). Das ändert
